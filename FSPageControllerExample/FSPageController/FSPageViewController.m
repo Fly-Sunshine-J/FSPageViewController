@@ -54,6 +54,7 @@
 
 - (void)initial {
     _titleHeight = 44;
+    _scale = YES;
 }
 
 - (instancetype)initWithClassNames:(NSArray<Class> *)classes titles:(NSArray<NSString *> *)titles {
@@ -92,6 +93,7 @@
 }
 
 // MARK: - Private Method
+// 计算frame
 - (void)fs_calculateFrames {
     NSUInteger vcCount = self.vcClasses.count;
     
@@ -144,7 +146,7 @@
 
 }
 
-
+// 初始化titles
 - (void)fs_setUpTitles {
     NSUInteger count = self.titles.count;
     
@@ -166,6 +168,7 @@
         currentLabel.font = self.titleFont;
         currentLabel.normalColor = self.titleNormalColor;
         currentLabel.selectedColor = self.titleSelectedColor;
+        currentLabel.scale = self.scale;
         currentLabel.tag = FSBaseTag + i;
         currentLabel.delegate = self;
         [self.titleLabels addObject:currentLabel];
@@ -175,6 +178,7 @@
     self.titleContentView.contentSize = CGSizeMake(lastLabel.fs_x + lastLabel.fs_width, _titleHeight);
 }
 
+// 初始化vc
 - (UIViewController *)fs_initViewControllerWithIndex:(NSUInteger)index {
     UIViewController *vc = [self.displayVCCache objectForKey:@(index)];
 
@@ -187,12 +191,14 @@
     return vc;
 }
 
+//添加vc到self
 - (void)fs_addChildViewControllerAtIndex:(NSUInteger)index {
     UIViewController *vc = [self fs_initViewControllerWithIndex:index];
     [vc didMoveToParentViewController:self];
     [self fs_addViewAtIndex:index];
 }
 
+// 添加vc的View到父View上
 - (void)fs_addViewAtIndex:(NSUInteger)index {
     UIViewController *vc = [self fs_initViewControllerWithIndex:index];
     if (vc.view.superview) {
@@ -201,7 +207,7 @@
     [self.contentScrollView addSubview:vc.view];
 }
 
-
+// 添加vc或者vc.view
 - (void)fs_addViewOrViewControllerAtIndex:(NSUInteger)index {
     if (!self.displayVCCache[@(index)]) {
         [self fs_addChildViewControllerAtIndex:index];
@@ -210,6 +216,7 @@
     }
 }
 
+// 移除vc.view
 - (void)fs_removeViewAtIndex:(NSUInteger)index {
     if (!self.displayVCCache[@(index)]) {
         return;
@@ -220,6 +227,7 @@
     }
 }
 
+// 改变titleLabel的颜色
 - (void)fs_changeTitleWithIndex:(NSUInteger)selectedIndex {
     FSHeaderLabel *lastLabel = self.titleLabels[_selectedIndex];
     lastLabel.normalColor = self.titleNormalColor;
@@ -227,6 +235,38 @@
     FSHeaderLabel *selectedLabel = self.titleLabels[selectedIndex];
     selectedLabel.normalColor = self.titleSelectedColor;
     selectedLabel.selectedColor = self.titleNormalColor;
+}
+
+// 保持需要的titleLabel在屏幕中间
+- (void)fs_adjustContentTitlePositionAtIndex:(NSUInteger)index {
+    FSHeaderLabel *titleLabel = self.titleLabels[index];
+    NSUInteger leftShowMaxIndex = 0;
+    NSUInteger rightShowMaxIndex = 0;
+    CGFloat totalWidth = 0;
+    CGFloat titleContentViewCenterX = self.titleContentView.fs_width / 2;
+    for (int i = 0; i < self.titleLabels.count; i++) {
+        totalWidth += self.titleMargin + self.titleWidths[i].floatValue;
+        if (totalWidth <  titleContentViewCenterX || totalWidth - self.titleWidths[i].floatValue / 2 < titleContentViewCenterX) {
+            leftShowMaxIndex = i;
+            continue;
+        }
+        if (self.titleContentView.contentSize.width - totalWidth < self.titleContentView.fs_width / 2 - self.titleMargin) {
+            rightShowMaxIndex = i;
+            break;
+        }
+    }
+    if (index <= leftShowMaxIndex) {
+        [self.titleContentView setContentOffset:CGPointMake(0, 0) animated:YES];
+        return;
+    }
+    
+    if (index >= rightShowMaxIndex) {
+        [self.titleContentView setContentOffset:CGPointMake(self.titleContentView.contentSize.width - self.titleContentView.fs_width + self.titleMargin, 0) animated:YES];
+        return;
+    }
+    
+    CGPoint point = CGPointMake(titleLabel.fs_x + titleLabel.fs_width / 2 - self.titleContentView.fs_width / 2, 0);
+    [self.titleContentView setContentOffset:point animated:YES];
 }
 
 
@@ -255,9 +295,11 @@
 - (void)setSelectedIndex:(NSInteger)selectedIndex {
     if (self.titleLabels.count) {
         [self fs_changeTitleWithIndex:selectedIndex];
+        [self fs_adjustContentTitlePositionAtIndex:selectedIndex];
+        self.titleLabels[selectedIndex].progress = 0;
         if (selectedIndex != 0) {
             [self.contentScrollView setContentOffset:CGPointMake(selectedIndex * self.contentScrollView.fs_width, 0)];
-        }else if (selectedIndex == 0) {
+        }else {
             [self fs_addChildViewControllerAtIndex:selectedIndex];
         }
     }
@@ -271,6 +313,22 @@
     }
     return _titleMargin;
 }
+
+- (void)setTitleContentColor:(UIColor *)titleContentColor {
+    self.titleContentView.backgroundColor = titleContentColor;
+}
+
+- (UIColor *)titleContentColor {
+    return self.titleContentView.backgroundColor;
+}
+
+- (void)setScale:(BOOL)scale {
+    _scale = scale;
+    for (FSHeaderLabel *lable in self.titleLabels) {
+        lable.scale = scale;
+    }
+}
+
 
 // MARK: - 懒加载
 
@@ -359,7 +417,16 @@
         [self fs_addViewOrViewControllerAtIndex:index];
         return;
     }
-
+    
+    /**********标题渐变色************/
+    CGFloat rate = offsetX / scrollView.fs_width - index;
+    self.titleLabels[index].progress = rate;
+    if (index < self.childControllerCount - 1) {
+        self.titleLabels[index + 1].progress = 1 -rate;
+    }
+    /**********标题渐变色************/
+    
+    /**********vc的生命周期************/
     if (self.lastContentOffsetX > offsetX) {  //右划index-1
 //        针对左滑松手后反弹之后，因为左滑之后左滑index不变，移除刚刚显示的view就是移除index + 1的view，这里需要判断极限offset
         if (offsetX == index * scrollView.fs_width) {
@@ -391,7 +458,7 @@
     
 //    显示vc
     [self fs_addViewOrViewControllerAtIndex:index];
-    
+    /**********vc的生命周期************/
     _lastContentOffsetX = offsetX;
 }
 
@@ -409,6 +476,7 @@
     NSUInteger index = (NSUInteger)(offsetX / scrollView.fs_width);
     _dragging = NO;
     [self fs_changeTitleWithIndex:index];
+    [self fs_adjustContentTitlePositionAtIndex:index];
     _selectedIndex = index;
 }
 
@@ -418,10 +486,15 @@
     if (index == self.selectedIndex) {
         return;
     }
+    [UIView animateWithDuration:0.25 animations:^{
+        self.titleLabels[_selectedIndex].progress = 1;
+        self.titleLabels[index].progress = 0;
+    }];
     [self fs_removeViewAtIndex:self.selectedIndex];
     [self fs_changeTitleWithIndex:index];
     [self fs_addViewOrViewControllerAtIndex:index];
     [self.contentScrollView setContentOffset:CGPointMake(index * self.contentScrollView.fs_width, 0)];
+    [self fs_adjustContentTitlePositionAtIndex:index];
     _selectedIndex = index;
 }
 

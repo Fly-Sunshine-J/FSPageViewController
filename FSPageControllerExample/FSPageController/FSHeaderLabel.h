@@ -22,6 +22,8 @@
 @property (nonatomic, strong) UIColor *normalColor;
 @property (nonatomic, strong) UIColor *selectedColor;
 
+@property (nonatomic, assign, getter=isScale) BOOL scale;
+
 @property (nonatomic, weak) id<FSHeaderLabelDelegate> delegate;
 
 @end

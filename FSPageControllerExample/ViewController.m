@@ -30,6 +30,7 @@
     sub.selectedIndex = 2;
 //    sub.titleHeight = 100;
 //    sub.titleMargin = 100;
+//    sub.scale = NO;
     
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]]];
     
@@ -57,6 +58,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self presentViewController:self.controller[indexPath.row] animated:YES completion:nil];
+
 }
 
 
