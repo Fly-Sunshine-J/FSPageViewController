@@ -69,6 +69,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
 //    防止带有tabBarController和NaviagtionController组合时候的偏移
     self.tabBarController.automaticallyAdjustsScrollViewInsets = NO;

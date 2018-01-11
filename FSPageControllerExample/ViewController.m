@@ -28,10 +28,11 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.dataArray = @[@"Normal", @"NavigationBar", @"TabBar", @"NavigationBar+TabBar"];
     
-    NormalViewController *sub = [[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
+    FSPageViewController *sub = [[FSPageViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
     sub.selectedIndex = 2;
     sub.titleHeight = 100;
     sub.titleMargin = 100;
+    sub.titleContentColor = [UIColor lightGrayColor];
     sub.scale = NO;
     
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]]];
