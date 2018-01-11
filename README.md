@@ -16,7 +16,7 @@
 
 ##### iPhone6 Plus + iOS8.1
 
-![Normal+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/blob/master/gif/[Normal+iOS8.1.gif)
+![Normal+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/blob/master/gif/Normal+iOS8.1.gif)
 
 ![NavigationBar+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/blob/master/gif/NavigationBar+iOS8.1.gif)
 
