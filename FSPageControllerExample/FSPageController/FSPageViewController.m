@@ -125,12 +125,16 @@
     _vcClasses = [vcs copy];
     
     UIViewController *vc = self.displayVCCache[@(index)];
-    if (vc && index == self.selectedIndex) {
-        [self fs_removeViewAtIndex:index];
-        [vc willMoveToParentViewController:nil];
-        [vc removeFromParentViewController];
-        [self.displayVCCache removeObjectForKey:@(index)];
-        [self fs_addViewOrViewControllerAtIndex:index];
+    if (vc) {
+        if (index == self.selectedIndex) {
+            [self fs_removeViewAtIndex:index];
+            [vc willMoveToParentViewController:nil];
+            [vc removeFromParentViewController];
+            [self.displayVCCache removeObjectForKey:@(index)];
+            [self fs_addViewOrViewControllerAtIndex:index];
+        }else {
+            [self.displayVCCache removeObjectForKey:@(index)];
+        }
     }
     
 }

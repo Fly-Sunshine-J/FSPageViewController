@@ -54,13 +54,15 @@
         case 1:
             [self.fs_PageController setViewControllerClass:[NewSubViewController class] atIndex:3];
             break;
-        case 2:
+        case 2: {
             [self.fs_PageController addViewControllerClass:[NewSubViewController class] title:[NSString stringWithFormat:@"添加一组新的%lu", (unsigned long)count] atIndex:4];
+            count++;
+        }
             break;
         default:
             break;
     }
-    count++;
+    
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {

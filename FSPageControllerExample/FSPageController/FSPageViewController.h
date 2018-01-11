@@ -73,7 +73,7 @@
 
 
 /**
- 添加一组新的VC和Title在某一位置上
+ 添加一组新的VC和Title在某一位置上，如果位置大于等于初始化使用的vc的数量，默认添加到最后
 
  @param viewControllerClass ViewController的Class
  @param title 标题
