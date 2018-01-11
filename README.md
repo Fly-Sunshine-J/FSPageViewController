@@ -1,30 +1,30 @@
-#### FSPageViewController
+### FSPageViewController
 
-##### 简介
+#### 简介
 
 这是一个开源的分页控制器，完美的模拟了UIViewController的生命周期方法，支持横竖屏，标题的颜色渐变和标题选中放大效果。特效不多，后期继续添加效果。先放几张动图让大家看看效果。（动图背景色忘了修改，大家凑合看吧，不想重新录制了）
 
-###### iPhone X + iOS11
+##### iPhone X + iOS11
 
-![Normal.gif](http://upload-images.jianshu.io/upload_images/1771887-cd48d66afa0c1522.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![Normal.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/Normal.gif)
 
-![NavigationBar.gif](http://upload-images.jianshu.io/upload_images/1771887-a62d3f0ecaff6fb8.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![NavigationBar.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/NavigationBar.gif)
 
-![TabBar.gif](http://upload-images.jianshu.io/upload_images/1771887-ec3c8c3c4d1fb40b.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![TabBar.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/TabBar.gif)
 
-![NavigationBar+TabBar.gif](http://upload-images.jianshu.io/upload_images/1771887-338d909c33ddc733.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![NavigationBar+TabBar.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/NavigationBar+TabBar.gif)
 
-###### iPhone6 Plus + iOS8.1
+##### iPhone6 Plus + iOS8.1
 
-![Normal+iOS8.1.gif](http://upload-images.jianshu.io/upload_images/1771887-1bcc4bffdde55d30.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![Normal+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/[Normal+iOS8.1.gif)
 
-![NavigationBar+iOS8.1.gif](http://upload-images.jianshu.io/upload_images/1771887-6c700d9d953acf69.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![NavigationBar+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/NavigationBar+iOS8.1.gif)
 
-![TabBar+iOS8.1.gif](http://upload-images.jianshu.io/upload_images/1771887-2fcee5f110bcca52.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![TabBar+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/TabBar+iOS8.1.gif)
 
-![NavigationBar+TabBar+iOS8.1.gif](http://upload-images.jianshu.io/upload_images/1771887-a92469eb28ec0407.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![NavigationBar+TabBar+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/NavigationBar+TabBar+iOS8.1.gif)
 
-##### 用法
+#### 用法
 
 先看一下核心目录
 
@@ -40,7 +40,7 @@
 - (instancetype)initWithClassNames:(NSArray <Class>*)classes titles:(NSArray <NSString *> *)titles NS_DESIGNATED_INITIALIZER;
 ```
 
-##### 总结
+#### 总结
 
 最后附上[github](https://github.com/Fly-Sunshine-J/FSPageViewController)地址，喜欢的欢迎star，需要效果的请在简书下留言或者github issure。
 
