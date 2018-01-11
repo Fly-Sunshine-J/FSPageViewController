@@ -6,23 +6,23 @@
 
 ##### iPhone X + iOS11
 
-![Normal.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/Normal.gif)
+![Normal.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/blob/master/gif/Normal.gif)
 
-![NavigationBar.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/NavigationBar.gif)
+![NavigationBar.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/blob/master/gif/NavigationBar.gif)
 
-![TabBar.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/TabBar.gif)
+![TabBar.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/blob/master/gif/TabBar.gif)
 
-![NavigationBar+TabBar.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/NavigationBar+TabBar.gif)
+![NavigationBar+TabBar.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/blob/master/gif/NavigationBar+TabBar.gif)
 
 ##### iPhone6 Plus + iOS8.1
 
-![Normal+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/[Normal+iOS8.1.gif)
+![Normal+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/blob/master/gif/[Normal+iOS8.1.gif)
 
-![NavigationBar+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/NavigationBar+iOS8.1.gif)
+![NavigationBar+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/blob/master/gif/NavigationBar+iOS8.1.gif)
 
-![TabBar+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/TabBar+iOS8.1.gif)
+![TabBar+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/blob/master/gif/TabBar+iOS8.1.gif)
 
-![NavigationBar+TabBar+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/gif/NavigationBar+TabBar+iOS8.1.gif)
+![NavigationBar+TabBar+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/blob/master/gif/NavigationBar+TabBar+iOS8.1.gif)
 
 #### 用法
 
@@ -42,7 +42,7 @@
 
 #### 总结
 
-最后附上[github](https://github.com/Fly-Sunshine-J/FSPageViewController)地址，喜欢的欢迎star，需要效果的请在简书下留言或者github issure。
+喜欢的欢迎star，需要效果的请在简书下留言或者github issure。
 
 
 
