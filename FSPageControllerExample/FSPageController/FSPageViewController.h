@@ -12,7 +12,15 @@
 @interface FSPageViewController : UIViewController
 
 - (instancetype)init NS_UNAVAILABLE;
-- (instancetype)initWithClassNames:(NSArray <Class>*)classes titles:(NSArray <NSString *> *)titles NS_DESIGNATED_INITIALIZER;;
+
+/**
+ 初始化方法
+
+ @param classes UIViewController的类数组
+ @param titles 标题数组
+ @return 分页控制器
+ */
+- (instancetype)initWithClassNames:(NSArray <Class>*)classes titles:(NSArray <NSString *> *)titles NS_DESIGNATED_INITIALIZER;
 
 
 /**

@@ -69,6 +69,8 @@
 - (void)initial {
     _titleHeight = 44;
     _scale = YES;
+    _vcClasses = [NSArray array];
+    _titles = [NSArray array];
 }
 
 - (instancetype)initWithClassNames:(NSArray<Class> *)classes titles:(NSArray<NSString *> *)titles {
