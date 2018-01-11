@@ -32,6 +32,7 @@
         sub.title = [NSString stringWithFormat:@"Tab%@", @(i)];
         [self addChildViewController:sub];
     }
+
 }
 
 - (void)didReceiveMemoryWarning {

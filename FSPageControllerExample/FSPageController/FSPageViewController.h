@@ -11,7 +11,8 @@
 
 @interface FSPageViewController : UIViewController
 
-- (instancetype)initWithClassNames:(NSArray <Class>*)classes titles:(NSArray <NSString *> *)titles;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithClassNames:(NSArray <Class>*)classes titles:(NSArray <NSString *> *)titles NS_DESIGNATED_INITIALIZER;;
 
 
 /**

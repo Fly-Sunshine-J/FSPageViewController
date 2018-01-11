@@ -41,9 +41,24 @@
 
 //MARK: - 声明周期
 
-- (instancetype)init
-{
-    return [self initWithClassNames:nil titles:nil];
+//#pragma message "Ignoring designated initializer warnings"
+
+#pragma clang diagnostic ignored "-Wobjc-designated-initializers"
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self initial];
+    }
+    return self;
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        [self initial];
+    }
+    return self;
 }
 
 - (void)awakeFromNib {
@@ -57,8 +72,9 @@
 }
 
 - (instancetype)initWithClassNames:(NSArray<Class> *)classes titles:(NSArray<NSString *> *)titles {
-    self = [super init];
+    self = [self initWithNibName:nil bundle:nil];
     if (self) {
+        NSParameterAssert(classes.count == titles.count);
         _vcClasses = [classes copy];
         _titles = [titles copy];
         [self initial];
