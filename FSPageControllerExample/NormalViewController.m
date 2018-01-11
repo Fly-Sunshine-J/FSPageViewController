@@ -7,7 +7,6 @@
 //
 
 #import "NormalViewController.h"
-#import "SubViewController.h"
 
 @interface NormalViewController ()
 
@@ -34,6 +33,8 @@
     }
     [self resignFirstResponder];
 }
+
+
 
 - (void)dealloc {
     

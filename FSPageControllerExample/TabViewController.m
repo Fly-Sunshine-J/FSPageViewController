@@ -11,6 +11,10 @@
 
 #import "NormalViewController.h"
 
+#import "TableViewController.h"
+#import "CollectionViewController.h"
+
+
 @interface TabViewController ()
 
 @end
@@ -23,7 +27,7 @@
         UIViewController *sub = [[UIViewController alloc] init];
         sub.view.backgroundColor = [UIColor whiteColor];
         if (i == 2) {
-            sub = [[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
+            sub = [[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
         }
         sub.title = [NSString stringWithFormat:@"Tab%@", @(i)];
         [self addChildViewController:sub];

@@ -21,7 +21,6 @@
 @interface FSPageViewController ()<UIScrollViewDelegate, FSHeaderLabelDelegate> {
     BOOL _isAppear;
     BOOL _dragging;
-
 }
 
 @property (nonatomic, strong) UIView *contentView;
@@ -73,6 +72,13 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
 //    防止带有tabBarController和NaviagtionController组合时候的偏移
     self.tabBarController.automaticallyAdjustsScrollViewInsets = NO;
+    
+    if (@available(iOS 11.0, *)) {
+        
+    } else {
+        [self fs_forceLayout];
+    }
+    
 }
 
 - (void)viewDidLayoutSubviews {
@@ -80,10 +86,14 @@
     if (self.vcClasses.count == 0) {
         return;
     }
-//    if (!_isAppear) {
+    if (!_isAppear) {
         [self fs_forceLayout];
         _isAppear = YES;
-//    }
+    }
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    _isAppear = NO;
 }
 
 - (void)fs_forceLayout {
@@ -92,11 +102,103 @@
     self.selectedIndex = self.selectedIndex;
 }
 
+// MARK: - Public Method
+- (void)setTitle:(NSString *)title atIndex:(NSUInteger)index {
+    if (index >= self.childControllerCount || !title) {
+        return;
+    }
+    NSMutableArray *titlesArray = [self.titles mutableCopy];
+    [titlesArray replaceObjectAtIndex:index withObject:title];
+    _titles = [titlesArray copy];
+    if (self.displayVCCache[@(index)]) {
+        self.displayVCCache[@(index)].title = title;
+    }
+    [self fs_forceLayout];
+}
+
+- (void)setViewControllerClass:(Class)viewControllerClass atIndex:(NSUInteger)index {
+    if (index >= self.childControllerCount || viewControllerClass == NULL) {
+        return;
+    }
+    NSMutableArray *vcs = [self.vcClasses mutableCopy];
+    [vcs replaceObjectAtIndex:index withObject:viewControllerClass];
+    _vcClasses = [vcs copy];
+    
+    UIViewController *vc = self.displayVCCache[@(index)];
+    if (vc && index == self.selectedIndex) {
+        [self fs_removeViewAtIndex:index];
+        [vc willMoveToParentViewController:nil];
+        [vc removeFromParentViewController];
+        [self.displayVCCache removeObjectForKey:@(index)];
+        [self fs_addViewOrViewControllerAtIndex:index];
+    }
+    
+}
+
+- (void)addViewControllerClass:(Class)viewControllerClass title:(NSString *)title atIndex:(NSUInteger)index {
+    if (!viewControllerClass || !title) {
+        return;
+    }
+    
+    if (!_titles) {
+        _titles = [NSArray array];
+    }
+    
+    if (!_vcClasses) {
+        _vcClasses = [NSArray array];
+    }
+    
+    NSMutableArray *titlesArray = [self.titles mutableCopy];
+    NSMutableArray *vcs = [self.vcClasses mutableCopy];
+    
+    if (_selectedIndex > index) {
+        _selectedIndex = _selectedIndex + 1;
+        
+    }
+    
+    if (index >= self.childControllerCount) {
+        [vcs addObject:viewControllerClass];
+        [titlesArray addObject:title];
+    }else{
+        
+        NSArray *keys = [self.displayVCCache.allKeys sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+            return [obj1 integerValue] < [obj2 integerValue];
+        }];
+        for (NSNumber *key in keys) {
+            if (key.integerValue >= index) {
+                self.displayVCCache[@(key.integerValue + 1)] = self.displayVCCache[key];
+                if (index != _selectedIndex) {
+                    [self.displayVCCache removeObjectForKey:key];
+                }
+            }
+        }
+        
+        [vcs insertObject:viewControllerClass atIndex:index];
+        [titlesArray insertObject:title atIndex:index];
+    }
+    _titles = [titlesArray copy];
+    _vcClasses = [vcs copy];
+    [self fs_calculateFrames];
+    [self fs_setUpTitles];
+    [self fs_setSelectedIndex:self.selectedIndex animated:NO];
+    
+    if (index == self.selectedIndex) {
+        [self fs_removeViewAtIndex:index];
+        [self.displayVCCache removeObjectForKey:@(index)];
+        [self fs_addViewOrViewControllerAtIndex:index];
+    }
+}
+
+
+- (void)setSelectedIndex:(NSInteger)selectedIndex animated:(BOOL)animated {
+    [self fs_setSelectedIndex:selectedIndex animated:animated];
+}
+
 // MARK: - Private Method
 // 计算frame
 - (void)fs_calculateFrames {
-    NSUInteger vcCount = self.vcClasses.count;
     
+    NSUInteger vcCount = self.vcClasses.count;
     
     if (vcCount != self.titles.count) {
         NSException *e = [NSException exceptionWithName:@"FSPageContrller" reason:@"子控制器和标题数量不相等" userInfo:nil];
@@ -117,6 +219,12 @@
         contentScrollViewHeight -= self.tabBarController.tabBar.fs_height;
     }
     self.contentScrollView.frame = CGRectMake(0, self.titleContentView.fs_y + self.titleContentView.fs_height, self.contentView.fs_width, contentScrollViewHeight);
+    
+    [self.vcViewFrames removeAllObjects];
+    for (int i = 0; i < self.childControllerCount; i++) {
+        CGRect frame = CGRectMake(i * self.contentScrollView.fs_width, 0, self.contentScrollView.fs_width, self.contentScrollView.fs_height);
+        [self.vcViewFrames addObject:[NSValue valueWithCGRect:frame]];
+    }
     self.contentScrollView.contentSize = CGSizeMake(self.contentScrollView.fs_width * self.childControllerCount, self.contentScrollView.fs_height);
     
     [self.titleWidths removeAllObjects];
@@ -128,13 +236,7 @@
             totalWidth += titleBounds.size.width;
         }
     }
-    
-    [self.vcViewFrames removeAllObjects];
-    for (int i = 0; i < self.childControllerCount; i++) {
-        CGRect frame = CGRectMake(i * self.contentScrollView.fs_width, 0, self.contentScrollView.fs_width, self.contentScrollView.fs_height);
-        [self.vcViewFrames addObject:[NSValue valueWithCGRect:frame]];
-    }
-    
+
     if (totalWidth > FSScreenW || self.titleMargin != FSDefaultTitleMargin) {
         self.titleContentView.contentInset = UIEdgeInsetsMake(0, 0, 0, self.titleMargin);
         return;
@@ -143,7 +245,7 @@
     CGFloat titleMargin = (FSScreenW - totalWidth) / (vcCount + 1);
     self.titleMargin = titleMargin > FSDefaultTitleMargin ? titleMargin : FSDefaultTitleMargin;
     self.titleContentView.contentInset = UIEdgeInsetsMake(0, 0, 0, self.titleMargin);
-
+    
 }
 
 // 初始化titles
@@ -181,19 +283,28 @@
 // 初始化vc
 - (UIViewController *)fs_initViewControllerWithIndex:(NSUInteger)index {
     UIViewController *vc = [self.displayVCCache objectForKey:@(index)];
-
+    if (index >= self.childControllerCount) {
+        return nil;
+    }
     if (!vc) {
-        vc = [[self.vcClasses[index] alloc] init];
+        Class class = self.vcClasses[index];
+        if ([class isSubclassOfClass:[UICollectionViewController class]] && [vc respondsToSelector:@selector(init)]) {
+            @throw [NSException exceptionWithName:@"FSPageViewController" reason:@"暂不支持直接UICollectionViewController及子类的设置，建议使用UICollectionView代替" userInfo:nil];
+        }
+        vc = [[class alloc] init];
         vc.title = self.titles[index];
         [self.displayVCCache setObject:vc forKey:@(index)];
     }
-    vc.view.frame = [self.vcViewFrames[index] CGRectValue];
     return vc;
 }
 
 //添加vc到self
 - (void)fs_addChildViewControllerAtIndex:(NSUInteger)index {
     UIViewController *vc = [self fs_initViewControllerWithIndex:index];
+    if (!vc) {
+        return;
+    }
+    [self addChildViewController:vc];
     [vc didMoveToParentViewController:self];
     [self fs_addViewAtIndex:index];
 }
@@ -201,6 +312,7 @@
 // 添加vc的View到父View上
 - (void)fs_addViewAtIndex:(NSUInteger)index {
     UIViewController *vc = [self fs_initViewControllerWithIndex:index];
+    vc.view.frame = [self.vcViewFrames[index] CGRectValue];
     if (vc.view.superview) {
         return;
     }
@@ -238,7 +350,7 @@
 }
 
 // 保持需要的titleLabel在屏幕中间
-- (void)fs_adjustContentTitlePositionAtIndex:(NSUInteger)index {
+- (void)fs_adjustContentTitlePositionAtIndex:(NSUInteger)index animated:(BOOL)animated{
     FSHeaderLabel *titleLabel = self.titleLabels[index];
     NSUInteger leftShowMaxIndex = 0;
     NSUInteger rightShowMaxIndex = 0;
@@ -256,17 +368,31 @@
         }
     }
     if (index <= leftShowMaxIndex) {
-        [self.titleContentView setContentOffset:CGPointMake(0, 0) animated:YES];
+        [self.titleContentView setContentOffset:CGPointMake(0, 0) animated:animated];
         return;
     }
     
     if (index >= rightShowMaxIndex) {
-        [self.titleContentView setContentOffset:CGPointMake(self.titleContentView.contentSize.width - self.titleContentView.fs_width + self.titleMargin, 0) animated:YES];
+        [self.titleContentView setContentOffset:CGPointMake(self.titleContentView.contentSize.width - self.titleContentView.fs_width + self.titleMargin, 0) animated:animated];
         return;
     }
     
     CGPoint point = CGPointMake(titleLabel.fs_x + titleLabel.fs_width / 2 - self.titleContentView.fs_width / 2, 0);
-    [self.titleContentView setContentOffset:point animated:YES];
+    [self.titleContentView setContentOffset:point animated:animated];
+}
+
+- (void)fs_setSelectedIndex:(NSUInteger)selectedIndex animated:(BOOL)animated {
+    if (self.titleLabels.count) {
+        [self fs_changeTitleWithIndex:selectedIndex];
+        [self fs_adjustContentTitlePositionAtIndex:selectedIndex animated:animated];
+        self.titleLabels[selectedIndex].progress = 0;
+        if (selectedIndex != 0) {
+            [self.contentScrollView setContentOffset:CGPointMake(selectedIndex * self.contentScrollView.fs_width, 0)];
+        }else {
+            [self fs_addChildViewControllerAtIndex:selectedIndex];
+        }
+    }
+    _selectedIndex = selectedIndex;
 }
 
 
@@ -293,17 +419,7 @@
 }
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex {
-    if (self.titleLabels.count) {
-        [self fs_changeTitleWithIndex:selectedIndex];
-        [self fs_adjustContentTitlePositionAtIndex:selectedIndex];
-        self.titleLabels[selectedIndex].progress = 0;
-        if (selectedIndex != 0) {
-            [self.contentScrollView setContentOffset:CGPointMake(selectedIndex * self.contentScrollView.fs_width, 0)];
-        }else {
-            [self fs_addChildViewControllerAtIndex:selectedIndex];
-        }
-    }
-         _selectedIndex = selectedIndex;
+    [self fs_setSelectedIndex:selectedIndex animated:YES];
 }
 
 
@@ -414,6 +530,7 @@
     NSUInteger index = (NSUInteger)(offsetX / scrollView.fs_width);
     
     if (!_dragging) {
+        _lastContentOffsetX = offsetX;
         [self fs_addViewOrViewControllerAtIndex:index];
         return;
     }
@@ -431,23 +548,21 @@
 //        针对左滑松手后反弹之后，因为左滑之后左滑index不变，移除刚刚显示的view就是移除index + 1的view，这里需要判断极限offset
         if (offsetX == index * scrollView.fs_width) {
             [self fs_removeViewAtIndex:(index + 1)];
+            _lastContentOffsetX = offsetX;
             return;
         }
 //            右划需要移除上次显示在中间的View的index+1的view  又因为右划index会-1，所以这里应该使用index+2
-        if (self.displayVCCache[@(index + 2)] && self.displayVCCache[@(index + 2)].view.superview) {
-            [self fs_removeViewAtIndex:index + 2];
-        }
+        [self fs_removeViewAtIndex:index + 2];
 
     }else { //左滑index不变
 //        针对右滑松手后反弹之后
         if (offsetX == index * scrollView.fs_width) {
             [self fs_removeViewAtIndex:index - 1];
+            _lastContentOffsetX = offsetX;
             return;
         }
 //        左滑需要移除上次显示在中间View的index-1的View，因为左滑index不变，所以直接移除index-1的view即可
-        if (self.displayVCCache[@(index - 1)] && self.displayVCCache[@(index -1)].view.superview) {
-            [self.displayVCCache[@(index - 1)].view removeFromSuperview];
-        }
+        [self fs_removeViewAtIndex:index - 1];
         
 //        因为需要展示下一个vc，所以需要index+1，然后展示
         index += 1;
@@ -476,7 +591,7 @@
     NSUInteger index = (NSUInteger)(offsetX / scrollView.fs_width);
     _dragging = NO;
     [self fs_changeTitleWithIndex:index];
-    [self fs_adjustContentTitlePositionAtIndex:index];
+    [self fs_adjustContentTitlePositionAtIndex:index animated:YES];
     _selectedIndex = index;
 }
 
@@ -494,7 +609,7 @@
     [self fs_changeTitleWithIndex:index];
     [self fs_addViewOrViewControllerAtIndex:index];
     [self.contentScrollView setContentOffset:CGPointMake(index * self.contentScrollView.fs_width, 0)];
-    [self fs_adjustContentTitlePositionAtIndex:index];
+    [self fs_adjustContentTitlePositionAtIndex:index animated:YES];
     _selectedIndex = index;
 }
 

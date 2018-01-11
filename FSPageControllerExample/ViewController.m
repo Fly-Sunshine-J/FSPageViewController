@@ -10,6 +10,8 @@
 #import "NormalViewController.h"
 #import "TabViewController.h"
 #import "SubViewController.h"
+#import "TableViewController.h"
+#import "CollectionViewController.h"
 
 @interface ViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -26,13 +28,13 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.dataArray = @[@"Normal", @"NavigationBar", @"TabBar", @"NavigationBar+TabBar"];
     
-    NormalViewController *sub = [[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
+    NormalViewController *sub = [[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
     sub.selectedIndex = 2;
-//    sub.titleHeight = 100;
-//    sub.titleMargin = 100;
-//    sub.scale = NO;
+    sub.titleHeight = 100;
+    sub.titleMargin = 100;
+    sub.scale = NO;
     
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class], [SubViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]]];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]]];
     
     TabViewController *tab = [[TabViewController alloc] init];
     
@@ -42,6 +44,10 @@
     
     [self tableView];
     
+}
+
+- (void)viewDidLayoutSubviews {
+    self.tableView.frame = CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height - 20);
 }
 
 
@@ -64,7 +70,7 @@
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height - 20) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
