@@ -455,6 +455,10 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     CGFloat offsetX = scrollView.contentOffset.x;
     NSUInteger index = (NSUInteger)(offsetX / scrollView.fs_width);
     
+    if (!_isAppear) {  //解决闪屏的问题
+        return;
+    }
+    
     if (!_dragging) {
         _lastContentOffsetX = offsetX;
         [self fs_addViewOrViewControllerAtIndex:index];

@@ -36,7 +36,7 @@ typedef NS_OPTIONS(NSInteger, FSPageViewControllerStyleOption) {
 
 
 /**
- 标题视图动画效果，默认是Default效果
+ 标题视图动画效果，默认是颜色渐变效果
  */
 @property (nonatomic, assign) FSPageViewControllerStyleOption style;
 
