@@ -17,7 +17,6 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *dataArray;
-@property (nonatomic, strong) NSArray *controller;
 
 @end
 
@@ -27,21 +26,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     self.dataArray = @[@"Normal", @"NavigationBar", @"TabBar", @"NavigationBar+TabBar"];
-    
-    NormalViewController *sub = [[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
-    sub.selectedIndex = 2;
-    sub.titleHeight = 100;
-    sub.titleMargin = 100;
-    sub.titleContentColor = [UIColor lightGrayColor];
-    sub.scale = NO;
-    
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]]];
-    
-    TabViewController *tab = [[TabViewController alloc] init];
-    
-    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:[[TabViewController alloc] init]];
-    
-    self.controller = @[sub, nav, tab, nav2];
     
     [self tableView];
     
@@ -64,7 +48,25 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self presentViewController:self.controller[indexPath.row] animated:YES completion:nil];
+    if (indexPath.row == 0) {
+        NormalViewController *sub = [[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
+        sub.selectedIndex = 2;
+        sub.titleHeight = 100;
+        sub.titleMargin = 100;
+        sub.titleContentColor = [UIColor lightGrayColor];
+        sub.scale = NO;
+        [self presentViewController:sub animated:YES completion:nil];
+    }else if (indexPath.row == 1) {
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]]];
+        [self presentViewController:nav animated:YES completion:nil];
+    }else if (indexPath.row == 2) {
+        TabViewController *tab = [[TabViewController alloc] init];
+        [self presentViewController:tab animated:YES completion:nil];
+    }else {
+        UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:[[TabViewController alloc] init]];
+        [self presentViewController:nav2 animated:YES completion:nil];
+    }
+    
 
 }
 
