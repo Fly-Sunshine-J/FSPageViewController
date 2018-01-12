@@ -334,6 +334,14 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     return self.titleContentView.style;
 }
 
+- (void)setTitleContentColor:(UIColor *)titleContentColor {
+    self.titleContentView.titleContentColor = titleContentColor;
+}
+
+- (UIColor *)titleContentColor {
+    return self.titleContentView.titleContentColor;
+}
+
 
 - (void)setTitleFont:(UIFont *)titleFont {
     self.titleContentView.titleFont = titleFont;
@@ -382,11 +390,6 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
 
 - (CGFloat)titleMargin {
     return self.titleContentView.titleMargin;
-}
-
-
-- (void)setTitleContentColor:(UIColor *)titleContentColor {
-    
 }
 
 
