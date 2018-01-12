@@ -18,6 +18,9 @@
 #define FSScreenW [UIScreen mainScreen].bounds.size.width
 #define FSScreenH [UIScreen mainScreen].bounds.size.height
 
+NSNotificationName const FSPageViewControllerDidClickCurrentTitleNotification = @"FSPageViewControllerDidClickCurrentTitleNotification";
+FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageViewControllerCurrentIndexKey";
+
 @interface FSPageViewController ()<UIScrollViewDelegate, FSHeaderLabelDelegate> {
     BOOL _isAppear;
     BOOL _dragging;
@@ -69,8 +72,6 @@
 - (void)initial {
     _titleHeight = 44;
     _scale = YES;
-    _vcClasses = [NSArray array];
-    _titles = [NSArray array];
 }
 
 - (instancetype)initWithClassNames:(NSArray<Class> *)classes titles:(NSArray<NSString *> *)titles {
@@ -95,7 +96,7 @@
     if (@available(iOS 11.0, *)) {
         
     } else {
-        [self fs_forceLayout];
+        [self fs_forceLayoutIfNeed];
     }
     
 }
@@ -105,20 +106,21 @@
     if (self.vcClasses.count == 0) {
         return;
     }
-    if (!_isAppear) {
-        [self fs_forceLayout];
-        _isAppear = YES;
-    }
+    [self fs_forceLayoutIfNeed];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     _isAppear = NO;
 }
 
-- (void)fs_forceLayout {
-    [self fs_calculateFrames];
-    [self fs_setUpTitles];
+- (void)fs_forceLayoutIfNeed {
+    if (!_isAppear) {
+        [self fs_calculateFrames];
+        [self fs_setUpTitles];
+        _isAppear = YES;
+    }
     self.selectedIndex = self.selectedIndex;
+    self.titleContentColor = self.titleContentColor;
 }
 
 // MARK: - Public Method
@@ -132,7 +134,8 @@
     if (self.displayVCCache[@(index)]) {
         self.displayVCCache[@(index)].title = title;
     }
-    [self fs_forceLayout];
+    _isAppear = YES;
+    [self fs_forceLayoutIfNeed];
 }
 
 - (void)setViewControllerClass:(Class)viewControllerClass atIndex:(NSUInteger)index {
@@ -405,7 +408,7 @@
 }
 
 - (void)fs_setSelectedIndex:(NSUInteger)selectedIndex animated:(BOOL)animated {
-    if (self.titleLabels.count) {
+    if (self.titleLabels.count && _isAppear) {
         [self fs_changeTitleWithIndex:selectedIndex];
         [self fs_adjustContentTitlePositionAtIndex:selectedIndex animated:animated];
         self.titleLabels[selectedIndex].progress = 0;
@@ -454,12 +457,12 @@
 }
 
 - (void)setTitleContentColor:(UIColor *)titleContentColor {
-    self.titleContentView.backgroundColor = titleContentColor;
+    if (_isAppear) {
+        self.titleContentView.backgroundColor = titleContentColor;
+    }
+    _titleContentColor = titleContentColor;
 }
 
-- (UIColor *)titleContentColor {
-    return self.titleContentView.backgroundColor;
-}
 
 - (void)setScale:(BOOL)scale {
     _scale = scale;
@@ -622,6 +625,7 @@
 - (void)touchUpInside:(FSHeaderLabel *)headerLabel {
     NSInteger index = headerLabel.tag - FSBaseTag;
     if (index == self.selectedIndex) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:FSPageViewControllerDidClickCurrentTitleNotification object:self userInfo:@{FSPageViewControllerCurrentIndexKey:@(index)}];;
         return;
     }
     [UIView animateWithDuration:0.25 animations:^{

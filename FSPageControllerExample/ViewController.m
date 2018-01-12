@@ -28,7 +28,7 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.dataArray = @[@"Normal", @"NavigationBar", @"TabBar", @"NavigationBar+TabBar"];
     
-    FSPageViewController *sub = [[FSPageViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
+    NormalViewController *sub = [[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
     sub.selectedIndex = 2;
     sub.titleHeight = 100;
     sub.titleMargin = 100;

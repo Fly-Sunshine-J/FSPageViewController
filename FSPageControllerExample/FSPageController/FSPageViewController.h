@@ -9,6 +9,13 @@
 #import <UIKit/UIKit.h>
 
 
+/*点击当前的title发出的通知*/
+UIKIT_EXTERN NSNotificationName const FSPageViewControllerDidClickCurrentTitleNotification;
+
+typedef NSString * FSPageViewControllerKey NS_STRING_ENUM;
+/*通知中userinfo中获取index的key*/
+FOUNDATION_EXPORT FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey;
+
 @interface FSPageViewController : UIViewController
 
 - (instancetype)init NS_UNAVAILABLE;
