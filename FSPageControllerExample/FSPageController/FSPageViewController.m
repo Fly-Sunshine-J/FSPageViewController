@@ -105,15 +105,6 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     _isAppear = NO;
 }
 
-- (void)fs_forceLayoutIfNeed {
-    if (!_isAppear) {
-        [self fs_calculateFrames];
-        _isAppear = YES;
-    }
-    self.selectedIndex = self.selectedIndex;
-    self.titleContentColor = self.titleContentColor;
-}
-
 // MARK: - Public Method
 - (void)setTitle:(NSString *)title atIndex:(NSUInteger)index {
     if (index >= self.childControllerCount || !title) {
@@ -313,14 +304,23 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
 
 
 - (void)fs_setSelectedIndex:(NSUInteger)selectedIndex animated:(BOOL)animated {
+    self.titleContentView.selectedIndex = selectedIndex;
     if (_isAppear) {
-        self.titleContentView.selectedIndex = selectedIndex;
         if (selectedIndex != 0) {
             [self.contentScrollView setContentOffset:CGPointMake(selectedIndex * self.contentScrollView.fs_width, 0)];
         }else {
             [self fs_addChildViewControllerAtIndex:selectedIndex];
         }
     }
+}
+
+- (void)fs_forceLayoutIfNeed {
+    if (!_isAppear) {
+        [self fs_calculateFrames];
+        _isAppear = YES;
+    }
+    self.selectedIndex = self.selectedIndex;
+    self.titleContentColor = self.titleContentColor;
 }
 
 
