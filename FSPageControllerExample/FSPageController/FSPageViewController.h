@@ -16,6 +16,11 @@ typedef NSString * FSPageViewControllerKey NS_STRING_ENUM;
 /*通知中userinfo中获取index的key*/
 FOUNDATION_EXPORT FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey;
 
+typedef NS_OPTIONS(NSInteger, FSPageViewControllerStyleOption) {
+    FSPageViewControllerStyleScale            = 1 << 0,         // 比例变化
+    FSPageViewControllerStyleStaticLine       = 1 << 1,         //带有一个颜色线在titleContentView的下方
+};
+
 @interface FSPageViewController : UIViewController
 
 - (instancetype)init NS_UNAVAILABLE;
@@ -29,6 +34,11 @@ FOUNDATION_EXPORT FSPageViewControllerKey const FSPageViewControllerCurrentIndex
  */
 - (instancetype)initWithClassNames:(NSArray <Class>*)classes titles:(NSArray <NSString *> *)titles NS_DESIGNATED_INITIALIZER;
 
+
+/**
+ 标题视图动画效果，默认是Default效果
+ */
+@property (nonatomic, assign) FSPageViewControllerStyleOption style;
 
 /**
  title内容的背景色，默认[UIColor colorWithWhite:1 alpha:0.7]
@@ -46,7 +56,7 @@ FOUNDATION_EXPORT FSPageViewControllerKey const FSPageViewControllerCurrentIndex
 @property (nonatomic, strong) UIColor *titleNormalColor;
 
 /**
- title的字体选中颜色[UIColor blackColor]
+ title的字体选中颜色[UIColor redColor]
  */
 @property (nonatomic, strong) UIColor *titleSelectedColor;
 
@@ -64,12 +74,6 @@ FOUNDATION_EXPORT FSPageViewControllerKey const FSPageViewControllerCurrentIndex
  title直接的间隔，默认20
  */
 @property (nonatomic, assign) CGFloat titleMargin;
-
-/**
- title在切换的时候是否需要比例动画，默认YES
- */
-@property (nonatomic, assign, getter=isScale) BOOL scale;
-
 
 /**
  修改某一个位置的标题

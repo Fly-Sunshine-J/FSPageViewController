@@ -9,28 +9,25 @@
 #import "FSPageViewController.h"
 #import "FSHeaderLabel.h"
 #import "UIView+FSFrame.h"
+#import "FSTitleContentView.h"
+#import "FSMacro.h"
 
 
 #define FSDefaultTitleMargin 20
 #define FSDefaultFont [UIFont systemFontOfSize:15]
-#define FSBaseTag 20000
 
-#define FSScreenW [UIScreen mainScreen].bounds.size.width
-#define FSScreenH [UIScreen mainScreen].bounds.size.height
 
 NSNotificationName const FSPageViewControllerDidClickCurrentTitleNotification = @"FSPageViewControllerDidClickCurrentTitleNotification";
 FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageViewControllerCurrentIndexKey";
 
-@interface FSPageViewController ()<UIScrollViewDelegate, FSHeaderLabelDelegate> {
+@interface FSPageViewController ()<UIScrollViewDelegate, FSTitleContentViewDelegate> {
     BOOL _isAppear;
     BOOL _dragging;
 }
 
 @property (nonatomic, strong) UIView *contentView;
 
-@property (nonatomic, strong) UIScrollView *titleContentView;
-@property (nonatomic, strong) NSMutableArray<FSHeaderLabel *> *titleLabels;
-@property (nonatomic, strong) NSMutableArray<NSNumber *> *titleWidths;
+@property (nonatomic, strong) FSTitleContentView *titleContentView;
 
 @property (nonatomic, strong) UIScrollView *contentScrollView;
 @property (nonatomic, strong) NSMutableArray<NSValue *> *vcViewFrames;
@@ -51,7 +48,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [self initial];
+        
     }
     return self;
 }
@@ -59,19 +56,14 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [self initial];
+        
     }
     return self;
 }
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    [self initial];
-}
 
-- (void)initial {
-    _titleHeight = 44;
-    _scale = YES;
 }
 
 - (instancetype)initWithClassNames:(NSArray<Class> *)classes titles:(NSArray<NSString *> *)titles {
@@ -80,7 +72,6 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
         NSParameterAssert(classes.count == titles.count);
         _vcClasses = [classes copy];
         _titles = [titles copy];
-        [self initial];
     }
     return self;
 }
@@ -92,9 +83,10 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     self.automaticallyAdjustsScrollViewInsets = NO;
 //    防止带有tabBarController和NaviagtionController组合时候的偏移
     self.tabBarController.automaticallyAdjustsScrollViewInsets = NO;
+    self.navigationController.automaticallyAdjustsScrollViewInsets = NO;
     
     if (@available(iOS 11.0, *)) {
-        
+
     } else {
         [self fs_forceLayoutIfNeed];
     }
@@ -116,7 +108,6 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
 - (void)fs_forceLayoutIfNeed {
     if (!_isAppear) {
         [self fs_calculateFrames];
-        [self fs_setUpTitles];
         _isAppear = YES;
     }
     self.selectedIndex = self.selectedIndex;
@@ -134,7 +125,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     if (self.displayVCCache[@(index)]) {
         self.displayVCCache[@(index)].title = title;
     }
-    _isAppear = YES;
+    _isAppear = NO;
     [self fs_forceLayoutIfNeed];
 }
 
@@ -177,8 +168,8 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     NSMutableArray *titlesArray = [self.titles mutableCopy];
     NSMutableArray *vcs = [self.vcClasses mutableCopy];
     
-    if (_selectedIndex > index) {
-        _selectedIndex = _selectedIndex + 1;
+    if (self.selectedIndex > index) {
+        self.selectedIndex = self.selectedIndex + 1;
         
     }
     
@@ -193,7 +184,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
         for (NSNumber *key in keys) {
             if (key.integerValue >= index) {
                 self.displayVCCache[@(key.integerValue + 1)] = self.displayVCCache[key];
-                if (index != _selectedIndex) {
+                if (index != self.selectedIndex) {
                     [self.displayVCCache removeObjectForKey:key];
                 }
             }
@@ -205,7 +196,6 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     _titles = [titlesArray copy];
     _vcClasses = [vcs copy];
     [self fs_calculateFrames];
-    [self fs_setUpTitles];
     [self fs_setSelectedIndex:self.selectedIndex animated:NO];
     
     if (index == self.selectedIndex) {
@@ -238,7 +228,10 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     
     self.contentView.frame = CGRectMake(0, 0, FSScreenW, FSScreenH);
     
-    self.titleContentView.frame = CGRectMake(0, titleY, FSScreenW, _titleHeight);
+    [self.titleContentView removeFromSuperview];
+    self.titleContentView.frame = CGRectMake(0, titleY, FSScreenW, self.titleHeight);
+    self.titleContentView.titles = _titles;
+    [self.contentView addSubview:self.titleContentView];
     
     CGFloat contentScrollViewHeight = self.contentView.fs_height - self.titleContentView.fs_y - self.titleContentView.fs_height;
     if (!self.tabBarController.tabBar.hidden) {
@@ -253,58 +246,10 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     }
     self.contentScrollView.contentSize = CGSizeMake(self.contentScrollView.fs_width * self.childControllerCount, self.contentScrollView.fs_height);
     
-    [self.titleWidths removeAllObjects];
-    CGFloat totalWidth = 0;
-    for (NSString *title in self.titles) {
-        if ([title isKindOfClass:[NSString class]]) {
-            CGRect titleBounds = [title boundingRectWithSize:CGSizeMake(MAXFLOAT, 0) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: self.titleFont} context:nil];
-            [self.titleWidths addObject:@(titleBounds.size.width)];
-            totalWidth += titleBounds.size.width;
-        }
-    }
-
-    if (totalWidth > FSScreenW || self.titleMargin != FSDefaultTitleMargin) {
-        self.titleContentView.contentInset = UIEdgeInsetsMake(0, 0, 0, self.titleMargin);
-        return;
-    }
     
-    CGFloat titleMargin = (FSScreenW - totalWidth) / (vcCount + 1);
-    self.titleMargin = titleMargin > FSDefaultTitleMargin ? titleMargin : FSDefaultTitleMargin;
-    self.titleContentView.contentInset = UIEdgeInsetsMake(0, 0, 0, self.titleMargin);
     
 }
 
-// 初始化titles
-- (void)fs_setUpTitles {
-    NSUInteger count = self.titles.count;
-    
-    for (UILabel *label in self.titleLabels) {
-        [label removeFromSuperview];
-    }
-    [self.titleLabels removeAllObjects];
-    
-    CGFloat titleLabelW, titleLabelH, titleLabelX, titleLabelY;
-    titleLabelH = _titleHeight;
-    
-    for (int i = 0; i < count; i++) {
-        FSHeaderLabel *lastLabel = [self.titleLabels lastObject];
-        titleLabelW = [self.titleWidths[i] floatValue];
-        titleLabelX = lastLabel.fs_x + lastLabel.fs_width + self.titleMargin;
-        titleLabelY = 0;
-        FSHeaderLabel *currentLabel = [[FSHeaderLabel alloc] initWithFrame:CGRectMake(titleLabelX, titleLabelY, titleLabelW, titleLabelH)];
-        currentLabel.text = self.titles[i];
-        currentLabel.font = self.titleFont;
-        currentLabel.normalColor = self.titleNormalColor;
-        currentLabel.selectedColor = self.titleSelectedColor;
-        currentLabel.scale = self.scale;
-        currentLabel.tag = FSBaseTag + i;
-        currentLabel.delegate = self;
-        [self.titleLabels addObject:currentLabel];
-        [self.titleContentView addSubview:currentLabel];
-    }
-    FSHeaderLabel *lastLabel = [self.titleLabels lastObject];
-    self.titleContentView.contentSize = CGSizeMake(lastLabel.fs_x + lastLabel.fs_width, _titleHeight);
-}
 
 // 初始化vc
 - (UIViewController *)fs_initViewControllerWithIndex:(NSUInteger)index {
@@ -365,110 +310,83 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     }
 }
 
-// 改变titleLabel的颜色
-- (void)fs_changeTitleWithIndex:(NSUInteger)selectedIndex {
-    FSHeaderLabel *lastLabel = self.titleLabels[_selectedIndex];
-    lastLabel.normalColor = self.titleNormalColor;
-    lastLabel.selectedColor = self.titleSelectedColor;
-    FSHeaderLabel *selectedLabel = self.titleLabels[selectedIndex];
-    selectedLabel.normalColor = self.titleSelectedColor;
-    selectedLabel.selectedColor = self.titleNormalColor;
-}
 
-// 保持需要的titleLabel在屏幕中间
-- (void)fs_adjustContentTitlePositionAtIndex:(NSUInteger)index animated:(BOOL)animated{
-    FSHeaderLabel *titleLabel = self.titleLabels[index];
-    NSUInteger leftShowMaxIndex = 0;
-    NSUInteger rightShowMaxIndex = 0;
-    CGFloat totalWidth = 0;
-    CGFloat titleContentViewCenterX = self.titleContentView.fs_width / 2;
-    for (int i = 0; i < self.titleLabels.count; i++) {
-        totalWidth += self.titleMargin + self.titleWidths[i].floatValue;
-        if (totalWidth <  titleContentViewCenterX || totalWidth - self.titleWidths[i].floatValue / 2 < titleContentViewCenterX) {
-            leftShowMaxIndex = i;
-            continue;
-        }
-        if (self.titleContentView.contentSize.width - totalWidth < self.titleContentView.fs_width / 2 - self.titleMargin) {
-            rightShowMaxIndex = i;
-            break;
-        }
-    }
-    if (index <= leftShowMaxIndex) {
-        [self.titleContentView setContentOffset:CGPointMake(0, 0) animated:animated];
-        return;
-    }
-    
-    if (index >= rightShowMaxIndex) {
-        [self.titleContentView setContentOffset:CGPointMake(self.titleContentView.contentSize.width - self.titleContentView.fs_width + self.titleMargin, 0) animated:animated];
-        return;
-    }
-    
-    CGPoint point = CGPointMake(titleLabel.fs_x + titleLabel.fs_width / 2 - self.titleContentView.fs_width / 2, 0);
-    [self.titleContentView setContentOffset:point animated:animated];
-}
 
 - (void)fs_setSelectedIndex:(NSUInteger)selectedIndex animated:(BOOL)animated {
-    if (self.titleLabels.count && _isAppear) {
-        [self fs_changeTitleWithIndex:selectedIndex];
-        [self fs_adjustContentTitlePositionAtIndex:selectedIndex animated:animated];
-        self.titleLabels[selectedIndex].progress = 0;
+    if (_isAppear) {
+        self.titleContentView.selectedIndex = selectedIndex;
         if (selectedIndex != 0) {
             [self.contentScrollView setContentOffset:CGPointMake(selectedIndex * self.contentScrollView.fs_width, 0)];
         }else {
             [self fs_addChildViewControllerAtIndex:selectedIndex];
         }
     }
-    _selectedIndex = selectedIndex;
 }
 
 
 // MARK: - Setter & Getter
+
+-(void)setStyle:(FSPageViewControllerStyleOption)style {
+    self.titleContentView.style = style;
+}
+
+- (FSPageViewControllerStyleOption)style {
+    return self.titleContentView.style;
+}
+
+
+- (void)setTitleFont:(UIFont *)titleFont {
+    self.titleContentView.titleFont = titleFont;
+}
+
 - (UIFont *)titleFont {
-    if (!_titleFont) {
-        _titleFont = FSDefaultFont;
-    }
-    return _titleFont;
+    return self.titleContentView.titleFont;
+}
+
+- (void)setTitleNormalColor:(UIColor *)titleNormalColor {
+    self.titleContentView.titleNormalColor = titleNormalColor;
 }
 
 - (UIColor *)titleNormalColor {
-    if (!_titleNormalColor) {
-        _titleNormalColor = [UIColor blackColor];
-    }
-    return _titleNormalColor;
+    return self.titleContentView.titleNormalColor;
+}
+
+- (void)setTitleSelectedColor:(UIColor *)titleSelectedColor {
+    self.titleContentView.titleSelectedColor = titleSelectedColor;
 }
 
 - (UIColor *)titleSelectedColor {
-    if (!_titleSelectedColor) {
-        _titleSelectedColor = [UIColor redColor];
-    }
-    return _titleSelectedColor;
+    return self.titleContentView.titleSelectedColor;
 }
+
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex {
     [self fs_setSelectedIndex:selectedIndex animated:YES];
 }
 
+- (NSInteger)selectedIndex {
+    return self.titleContentView.selectedIndex;
+}
+
+- (void)setTitleHeight:(CGFloat)titleHeight {
+    self.titleContentView.titleHeight = titleHeight;
+}
+
+- (CGFloat)titleHeight {
+    return self.titleContentView.titleHeight;
+}
+
+- (void)setTitleMargin:(CGFloat)titleMargin {
+    self.titleContentView.titleMargin = titleMargin;
+}
 
 - (CGFloat)titleMargin {
-    if (_titleMargin == 0) {
-        return FSDefaultTitleMargin;
-    }
-    return _titleMargin;
+    return self.titleContentView.titleMargin;
 }
+
 
 - (void)setTitleContentColor:(UIColor *)titleContentColor {
-    if (_isAppear) {
-        self.titleContentView.backgroundColor = titleContentColor;
-    }
-    _titleContentColor = titleContentColor;
-}
-
-
-- (void)setScale:(BOOL)scale {
-    _scale = scale;
-    for (FSHeaderLabel *lable in self.titleLabels) {
-        lable.scale = scale;
-    }
+    
 }
 
 
@@ -482,35 +400,14 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     return _contentView;
 }
 
-- (UIScrollView *)titleContentView {
+- (FSTitleContentView *)titleContentView {
     if (!_titleContentView) {
-        _titleContentView = [[UIScrollView alloc] init];
-        if (@available(iOS 11.0, *)) {
-            _titleContentView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-        } else {
-            // Fallback on earlier versions
-        }
-        _titleContentView.backgroundColor = [UIColor colorWithWhite:1 alpha:0.7];
-        _titleContentView.showsVerticalScrollIndicator = NO;
-        _titleContentView.showsHorizontalScrollIndicator = NO;
-        [self.contentView addSubview:_titleContentView];
+        _titleContentView = [[FSTitleContentView alloc] init];
+        _titleContentView.fs_delegate = self;
     }
     return _titleContentView;
 }
 
-- (NSMutableArray<FSHeaderLabel *> *)titleLabels {
-    if (!_titleLabels) {
-        _titleLabels = [NSMutableArray array];
-    }
-    return _titleLabels;
-}
-
-- (NSMutableArray<NSNumber *> *)titleWidths {
-    if (!_titleWidths) {
-        _titleWidths = [NSMutableArray array];
-    }
-    return _titleWidths;
-}
 
 - (UIScrollView *)contentScrollView {
     if (!_contentScrollView) {
@@ -563,10 +460,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     
     /**********标题渐变色************/
     CGFloat rate = offsetX / scrollView.fs_width - index;
-    self.titleLabels[index].progress = rate;
-    if (index < self.childControllerCount - 1) {
-        self.titleLabels[index + 1].progress = 1 -rate;
-    }
+    [self.titleContentView updateTitleWithPorgress:rate atIndex:index];
     /**********标题渐变色************/
     
     /**********vc的生命周期************/
@@ -616,28 +510,16 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     CGFloat offsetX = scrollView.contentOffset.x;
     NSUInteger index = (NSUInteger)(offsetX / scrollView.fs_width);
     _dragging = NO;
-    [self fs_changeTitleWithIndex:index];
-    [self fs_adjustContentTitlePositionAtIndex:index animated:YES];
-    _selectedIndex = index;
+    [self.titleContentView adjustContentTitlePositionAtIndex:index animated:YES];
+    self.selectedIndex = index;
 }
 
-// MARK: -FSHeaderLabelDelegate
-- (void)touchUpInside:(FSHeaderLabel *)headerLabel {
-    NSInteger index = headerLabel.tag - FSBaseTag;
-    if (index == self.selectedIndex) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:FSPageViewControllerDidClickCurrentTitleNotification object:self userInfo:@{FSPageViewControllerCurrentIndexKey:@(index)}];;
-        return;
-    }
-    [UIView animateWithDuration:0.25 animations:^{
-        self.titleLabels[_selectedIndex].progress = 1;
-        self.titleLabels[index].progress = 0;
-    }];
+// MARK: - FSTitleContentViewDelegate
+
+- (void)contentViewTitleClick:(FSTitleContentView *)contentView atIndex:(NSUInteger)index {
     [self fs_removeViewAtIndex:self.selectedIndex];
-    [self fs_changeTitleWithIndex:index];
     [self fs_addViewOrViewControllerAtIndex:index];
     [self.contentScrollView setContentOffset:CGPointMake(index * self.contentScrollView.fs_width, 0)];
-    [self fs_adjustContentTitlePositionAtIndex:index animated:YES];
-    _selectedIndex = index;
 }
 
 // MARK: --

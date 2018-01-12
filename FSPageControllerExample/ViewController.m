@@ -54,7 +54,7 @@
         sub.titleHeight = 100;
         sub.titleMargin = 100;
         sub.titleContentColor = [UIColor lightGrayColor];
-        sub.scale = NO;
+        sub.style = FSPageViewControllerStyleScale;
         [self presentViewController:sub animated:YES completion:nil];
     }else if (indexPath.row == 1) {
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]]];
