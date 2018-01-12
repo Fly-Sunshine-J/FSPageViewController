@@ -42,7 +42,7 @@
 
 #### 总结
 
-喜欢的欢迎star，需要效果的请在[简书](https://www.jianshu.com/p/3e86ac9799a1)下留言或者github issure。
+喜欢的欢迎star，需要效果的请在[简书](https://www.jianshu.com/p/3e86ac9799a1)下留言或者github issure。Demo中真机返回上一页请摇一摇，模拟器请command+control+z。
 
 
 
