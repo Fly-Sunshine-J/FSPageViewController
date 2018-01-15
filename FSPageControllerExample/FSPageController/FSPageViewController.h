@@ -16,9 +16,10 @@ typedef NSString * FSPageViewControllerKey NS_STRING_ENUM;
 /*通知中userinfo中获取index的key*/
 FOUNDATION_EXPORT FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey;
 
-typedef NS_OPTIONS(NSInteger, FSPageViewControllerStyleOption) {
-    FSPageViewControllerStyleScale            = 1 << 0,         // 比例变化
-    FSPageViewControllerStyleStaticLine       = 1 << 1,         //带有一个颜色线在titleContentView的下方
+typedef NS_ENUM(NSInteger, FSPageViewControllerStyle) {
+    FSPageViewControllerStyleDefaul,
+    FSPageViewControllerStyleLine,
+    FSPageViewControllerStyleHollow,
 };
 
 @interface FSPageViewController : UIViewController
@@ -38,7 +39,12 @@ typedef NS_OPTIONS(NSInteger, FSPageViewControllerStyleOption) {
 /**
  标题视图动画效果，默认是颜色渐变效果
  */
-@property (nonatomic, assign) FSPageViewControllerStyleOption style;
+@property (nonatomic, assign) FSPageViewControllerStyle style;
+
+/**
+ 是否需要字体比例变换, 默认不需要，NO
+ */
+@property (nonatomic, assign, getter=isScale) BOOL scale;
 
 /**
  title内容的背景色，默认[UIColor colorWithWhite:1 alpha:0.7]
@@ -80,6 +86,11 @@ typedef NS_OPTIONS(NSInteger, FSPageViewControllerStyleOption) {
  titleContentView下方一个像素线的背景色
  */
 @property (nonatomic, strong) UIColor *bottomLineViewColor;
+
+/**
+ titleContentView下方一个线条的宽度，默认一个像素
+ */
+@property (nonatomic, assign) CGFloat bottomLineWidth;
 
 /**
  修改某一个位置的标题

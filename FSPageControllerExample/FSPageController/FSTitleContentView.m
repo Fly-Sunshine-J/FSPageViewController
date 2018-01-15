@@ -10,13 +10,18 @@
 #import "FSHeaderLabel.h"
 #import "FSMacro.h"
 #import "UIView+FSFrame.h"
+#import "FSProgressView.h"
 
 @interface FSTitleContentView()<FSHeaderLabelDelegate>
 
 @property (nonatomic, strong) NSMutableArray<FSHeaderLabel *> *titleLabels;
 @property (nonatomic, strong) NSMutableArray<NSNumber *> *titleWidths;
+@property (nonatomic, strong) NSMutableArray<NSValue *> *titleFrames;
+
+@property (nonatomic, assign) CGFloat titleLabelHeight;
 
 @property (nonatomic, strong) UIView *bottomLineView;
+@property (nonatomic, strong) FSProgressView *progressView;
 
 @end
 
@@ -30,9 +35,13 @@
         _titleFont = [UIFont systemFontOfSize:15];
         _titleNormalColor = [UIColor blackColor];
         _titleSelectedColor = [UIColor redColor];
+        _progressTintColor = _titleSelectedColor;
         _selectedIndex = 0;
         _titleHeight = 44;
         _titleMargin = 20;
+        _bottomLineViewColor = [UIColor lightGrayColor];
+        _bottomLineWidth = 1 / [UIScreen mainScreen].scale;
+        _style = FSPageViewControllerStyleDefaul;
         if (@available(iOS 11.0, *)) {
             self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
         } else {
@@ -53,15 +62,158 @@
 
 }
 
-// MARK: - Public Method
-- (void)updateTitleWithPorgress:(CGFloat)progress atIndex:(NSUInteger)index{
+
+// MARK: - Setter
+
+- (void)setTitles:(NSArray<NSString *> *)titles {
+    _titles = [titles copy];
+}
+
+
+- (void)setTitleContentColor:(UIColor *)titleContentColor {
+    _titleContentColor = titleContentColor;
+    self.backgroundColor = titleContentColor;
+}
+
+- (void)setSelectedIndex:(NSInteger)selectedIndex {
+    [self fs_setSelectedIndex:selectedIndex animated:YES];
+}
+
+- (void)setStyle:(FSPageViewControllerStyle)style {
+    _style = style;
+}
+
+- (void)setScale:(BOOL)scale {
+    _scale = scale;
+    for (FSHeaderLabel *lable in self.titleLabels) {
+        lable.scale = scale;
+    }
+}
+
+
+// MARK: - Private Method
+
+- (void)fs_calculateFrame {
+    [self.titleWidths removeAllObjects];
+    CGFloat totalWidth = 0;
+    for (NSString *title in self.titles) {
+        NSAssert2([title isKindOfClass:[NSString class]], @"标题必须是字符串\n%@-%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+        CGRect titleBounds = [title boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.titleFont} context:nil];
+        [self.titleWidths addObject:@(titleBounds.size.width)];
+        _titleLabelHeight = titleBounds.size.height;
+        totalWidth += titleBounds.size.width;
+    }
+    if (FSScreenW > totalWidth) {
+        CGFloat titleMargin = (FSScreenW - totalWidth) / (self.titles.count + 1);
+        _titleMargin = titleMargin > _titleMargin ? titleMargin : _titleMargin;
+    }
+    self.contentInset = UIEdgeInsetsMake(0, 0, 0, _titleMargin);
+}
+
+
+- (void)fs_setUpTitles {
+    NSUInteger count = self.titles.count;
+    if (count == 0) {
+        return;
+    }
+    for (FSHeaderLabel *label in self.titleLabels) {
+        [label removeFromSuperview];
+    }
+    [self.titleLabels removeAllObjects];
+    [self.titleFrames removeAllObjects];
+    
+    CGFloat titleLabelW, titleLabelH, titleLabelX, titleLabelY;
+    titleLabelH = _titleLabelHeight;
+    for (int i = 0; i < count; i++) {
+        FSHeaderLabel *lastLabel = [self.titleLabels lastObject];
+        titleLabelW = [self.titleWidths[i] floatValue];
+        titleLabelX = lastLabel.fs_x + lastLabel.fs_width + self.titleMargin;
+        titleLabelY = (self.titleHeight - titleLabelH) / 2;
+        CGRect frame = CGRectMake(titleLabelX, titleLabelY, titleLabelW, titleLabelH);
+        [self.titleFrames addObject:[NSValue valueWithCGRect:frame]];
+        FSHeaderLabel *currentLabel = [[FSHeaderLabel alloc] initWithFrame:frame];
+        currentLabel.text = self.titles[i];
+        currentLabel.font = self.titleFont;
+        currentLabel.normalColor = self.titleNormalColor;
+        currentLabel.selectedColor = self.titleSelectedColor;
+        currentLabel.scale = self.scale;
+        currentLabel.tag = FSBaseTag + i;
+        currentLabel.delegate = self;
+        [self.titleLabels addObject:currentLabel];
+        [self addSubview:currentLabel];
+    }
+    FSHeaderLabel *lastLabel = [self.titleLabels lastObject];
+    self.contentSize = CGSizeMake(lastLabel.fs_x + lastLabel.fs_width, _titleHeight);
+    
+    
+    CGFloat height = self.bottomLineWidth;
+    self.bottomLineView.frame = CGRectMake(0, self.fs_height - height, self.contentSize.width + self.titleMargin, height);
+    
+    [self fs_addProgressViewWithLine:self.style == FSPageViewControllerStyleLine];
+}
+
+
+- (void)fs_addProgressViewWithLine:(BOOL)isLine {
+    if (self.style == FSPageViewControllerStyleDefaul) {
+        return;
+    }
+    CGRect frame  = CGRectZero;
+    CGRect currentFrame = self.titleFrames[self.selectedIndex].CGRectValue;
+    CGFloat height = 2;
+    if (isLine) {
+        frame = CGRectMake(0, self.fs_height - height, self.bottomLineView.fs_width, height);
+        self.progressView.line = isLine;
+    }else {
+        CGFloat x = currentFrame.origin.x - self.titleMargin / 2;
+        CGFloat y = currentFrame.origin.y / 2;
+        CGFloat w = self.contentSize.width;
+        CGFloat h = currentFrame.size.height + currentFrame.origin.y;
+        frame = CGRectMake(x, y, w, h);
+    }
+    self.progressView.color = self.progressTintColor;
+    self.progressView.titleMargin = self.titleMargin;
+    self.progressView.frame = frame;
+    self.progressView.titleFrames = [self.titleFrames copy];
+    
+}
+
+- (void)fs_setSelectedIndex:(NSInteger)selectedIndex animated:(BOOL)animated {
+    if (self.titleLabels.count) {
+        [self fs_changeTitleWithIndex:selectedIndex];
+        [self fs_adjustContentTitlePositionAtIndex:selectedIndex animated:animated];
+        self.titleLabels[selectedIndex].progress = 0.0;
+        if (_progressView) {
+            _progressView.progress = selectedIndex;
+        }
+    }
+    _selectedIndex = selectedIndex;
+}
+
+- (void)fs_changeTitleWithIndex:(NSUInteger)selectedIndex {
+    [UIView animateWithDuration:0.25 animations:^{
+        self.titleLabels[_selectedIndex].progress = 1;
+        self.titleLabels[selectedIndex].progress = 0;
+    }];
+    FSHeaderLabel *lastLabel = self.titleLabels[_selectedIndex];
+    lastLabel.normalColor = self.titleNormalColor;
+    lastLabel.selectedColor = self.titleSelectedColor;
+    FSHeaderLabel *selectedLabel = self.titleLabels[selectedIndex];
+    selectedLabel.normalColor = self.titleSelectedColor;
+    selectedLabel.selectedColor = self.titleNormalColor;
+}
+
+
+- (void)fs_updateTitleWithPorgress:(CGFloat)progress atIndex:(NSUInteger)index{
+    if (progress > 1.0 || progress < 0.0) {
+        return;
+    }
     self.titleLabels[index].progress = progress;
     if (index < self.titles.count - 1) {
         self.titleLabels[index + 1].progress = 1 - progress;
     }
 }
 
-- (void)adjustContentTitlePositionAtIndex:(NSUInteger)index animated:(BOOL)animated{
+- (void)fs_adjustContentTitlePositionAtIndex:(NSUInteger)index animated:(BOOL)animated{
     FSHeaderLabel *titleLabel = self.titleLabels[index];
     NSUInteger leftShowMaxIndex = 0;
     NSUInteger rightShowMaxIndex = 0;
@@ -92,104 +244,6 @@
     [self setContentOffset:point animated:animated];
 }
 
-// MARK: - Setter
-
-- (void)setTitles:(NSArray<NSString *> *)titles {
-    _titles = [titles copy];
-}
-
-
-- (void)setTitleContentColor:(UIColor *)titleContentColor {
-    _titleContentColor = titleContentColor;
-    self.backgroundColor = titleContentColor;
-}
-
-- (void)setSelectedIndex:(NSInteger)selectedIndex {
-    [self fs_setSelectedIndex:selectedIndex animated:YES];
-}
-
-- (void)setStyle:(FSPageViewControllerStyleOption)style {
-    _style = style;
-    for (FSHeaderLabel *lable in self.titleLabels) {
-        lable.scale = _style & FSPageViewControllerStyleScale;
-    }
-}
-
-
-// MARK: - Private Method
-
-- (void)fs_calculateFrame {
-    [self.titleWidths removeAllObjects];
-    CGFloat totalWidth = 0;
-    for (NSString *title in self.titles) {
-        NSAssert2([title isKindOfClass:[NSString class]], @"标题必须是字符串\n%@-%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-        CGRect titleBounds = [title boundingRectWithSize:CGSizeMake(MAXFLOAT, 0) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.titleFont} context:nil];
-        [self.titleWidths addObject:@(titleBounds.size.width)];
-        totalWidth += titleBounds.size.width;
-    }
-    if (FSScreenW > totalWidth) {
-        CGFloat titleMargin = (FSScreenW - totalWidth) / (self.titles.count + 1);
-        _titleMargin = titleMargin > _titleMargin ? titleMargin : _titleMargin;
-    }
-    self.contentInset = UIEdgeInsetsMake(0, 0, 0, _titleMargin);
-}
-
-
-- (void)fs_setUpTitles {
-    NSUInteger count = self.titles.count;
-    if (count == 0) {
-        return;
-    }
-    for (FSHeaderLabel *label in self.titleLabels) {
-        [label removeFromSuperview];
-    }
-    [self.titleLabels removeAllObjects];
-    
-    CGFloat titleLabelW, titleLabelH, titleLabelX, titleLabelY;
-    titleLabelH = _titleHeight;
-    for (int i = 0; i < count; i++) {
-        FSHeaderLabel *lastLabel = [self.titleLabels lastObject];
-        titleLabelW = [self.titleWidths[i] floatValue];
-        titleLabelX = lastLabel.fs_x + lastLabel.fs_width + self.titleMargin;
-        titleLabelY = 0;
-        FSHeaderLabel *currentLabel = [[FSHeaderLabel alloc] initWithFrame:CGRectMake(titleLabelX, titleLabelY, titleLabelW, titleLabelH)];
-        currentLabel.text = self.titles[i];
-        currentLabel.font = self.titleFont;
-        currentLabel.normalColor = self.titleNormalColor;
-        currentLabel.selectedColor = self.titleSelectedColor;
-        currentLabel.scale = self.style & FSPageViewControllerStyleScale;
-        currentLabel.tag = FSBaseTag + i;
-        currentLabel.delegate = self;
-        [self.titleLabels addObject:currentLabel];
-        [self addSubview:currentLabel];
-    }
-    FSHeaderLabel *lastLabel = [self.titleLabels lastObject];
-    self.contentSize = CGSizeMake(lastLabel.fs_x + lastLabel.fs_width, _titleHeight);
-    CGFloat height = 1.0 / [UIScreen mainScreen].scale;
-    self.bottomLineView.frame = CGRectMake(0, self.fs_height - height, self.contentSize.width + self.titleMargin, height);
-}
-
-- (void)fs_setSelectedIndex:(NSInteger)selectedIndex animated:(BOOL)animated {
-    if (self.titleLabels.count) {
-        [self fs_changeTitleWithIndex:selectedIndex];
-        [self adjustContentTitlePositionAtIndex:selectedIndex animated:animated];
-        self.titleLabels[selectedIndex].progress = 0.0;
-    }
-    _selectedIndex = selectedIndex;
-}
-
-- (void)fs_changeTitleWithIndex:(NSUInteger)selectedIndex {
-    [UIView animateWithDuration:0.25 animations:^{
-        self.titleLabels[_selectedIndex].progress = 1;
-        self.titleLabels[selectedIndex].progress = 0;
-    }];
-    FSHeaderLabel *lastLabel = self.titleLabels[_selectedIndex];
-    lastLabel.normalColor = self.titleNormalColor;
-    lastLabel.selectedColor = self.titleSelectedColor;
-    FSHeaderLabel *selectedLabel = self.titleLabels[selectedIndex];
-    selectedLabel.normalColor = self.titleSelectedColor;
-    selectedLabel.selectedColor = self.titleNormalColor;
-}
 
 // MARK: -Lazy
 - (NSMutableArray<FSHeaderLabel *> *)titleLabels {
@@ -206,13 +260,49 @@
     return _titleWidths;
 }
 
+
+- (NSMutableArray<NSValue *> *)titleFrames {
+    if (!_titleFrames) {
+        _titleFrames = [NSMutableArray array];
+    }
+    return _titleFrames;
+}
+
 - (UIView *)bottomLineView {
     if (!_bottomLineView) {
         _bottomLineView = [[UIView alloc] initWithFrame:CGRectZero];
-        _bottomLineView.backgroundColor = [UIColor lightGrayColor];
+        _bottomLineView.backgroundColor = self.bottomLineViewColor;
         [self addSubview:_bottomLineView];
     }
     return _bottomLineView;
+}
+
+- (FSProgressView *)progressView {
+    if (!_progressView) {
+        _progressView = [[FSProgressView alloc] init];
+        _progressView.color = self.progressTintColor;
+        [self insertSubview:_progressView atIndex:0];
+    }
+    return _progressView;
+}
+
+// MARK: - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat offsetX = scrollView.contentOffset.x;
+    NSUInteger index = (NSUInteger)(offsetX / scrollView.fs_width);
+    CGFloat rate = offsetX / scrollView.fs_width - index;
+    [self fs_updateTitleWithPorgress:rate atIndex:index];
+    self.progressView.progress = offsetX / scrollView.fs_width;
+}
+
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
 }
 
 // MARK: - FSHeaderLabelDelegate

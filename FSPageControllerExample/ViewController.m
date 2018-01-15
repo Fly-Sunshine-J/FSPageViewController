@@ -53,13 +53,17 @@
         sub.selectedIndex = 2;
         sub.titleHeight = 100;
         sub.titleMargin = 100;
-        sub.titleContentColor = [UIColor lightGrayColor];
-        sub.style = FSPageViewControllerStyleScale;
+        sub.titleContentColor = [UIColor yellowColor];
+        sub.scale = YES;
+        sub.style = FSPageViewControllerStyleLine;
+//        sub.bottomLineViewColor = [UIColor redColor];
+//        sub.bottomLineWidth = 5;
         [self presentViewController:sub animated:YES completion:nil];
     }else if (indexPath.row == 1) {
 //        NormalViewController *sub = [[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
         NormalViewController *sub = [[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:sub];
+        sub.style = FSPageViewControllerStyleLine;
         [self presentViewController:nav animated:YES completion:nil];
     }else if (indexPath.row == 2) {
         TabViewController *tab = [[TabViewController alloc] init];

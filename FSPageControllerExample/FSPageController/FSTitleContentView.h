@@ -16,11 +16,16 @@
 - (void)contentViewTitleClick:(FSTitleContentView *)contentView atIndex:(NSUInteger)index;
 @end
 
-@interface FSTitleContentView : UIScrollView
+@interface FSTitleContentView : UIScrollView<UIScrollViewDelegate>
 
 @property (nonatomic, weak) id<FSTitleContentViewDelegate> fs_delegate;
 
-@property (nonatomic, assign) FSPageViewControllerStyleOption style;
+@property (nonatomic, assign) FSPageViewControllerStyle style;
+
+/**
+ 是否需要字体比例变换, 默认不需要，NO
+ */
+@property (nonatomic, assign, getter=isScale) BOOL scale;
 
 @property (nonatomic, strong) NSArray<NSString *> *titles;
 
@@ -60,25 +65,20 @@
 @property (nonatomic, assign) CGFloat titleMargin;
 
 /**
- titleContentView下方一个像素线的背景色
+ titleContentView下方一个线条的背景色 默认[UIColor lightGrayColor]
  */
 @property (nonatomic, strong) UIColor *bottomLineViewColor;
 
-/**
- 更新颜色渐变
 
- @param progress 渐变值
- @param index 需要渐变的位置
+/**
+ titleContentView下方一个线条的宽度，默认一个像素
  */
-- (void)updateTitleWithPorgress:(CGFloat)progress atIndex:(NSUInteger)index;
+@property (nonatomic, assign) CGFloat bottomLineWidth;
 
 
 /**
- 保持titleLabel居中
-
- @param index tilteLabel的位置
- @param animated 是否需要动画
+ ProgressView的TintColor
  */
-- (void)adjustContentTitlePositionAtIndex:(NSUInteger)index animated:(BOOL)animated;
+@property (nonatomic, strong) UIColor *progressTintColor;
 
 @end

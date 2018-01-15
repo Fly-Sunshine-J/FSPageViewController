@@ -72,6 +72,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
         NSAssert2(classes.count == titles.count, @"classes的数量和titles的数量不相等\n%@-%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
         _vcClasses = [classes copy];
         _titles = [titles copy];
+    
     }
     return self;
 }
@@ -90,7 +91,6 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     } else {
         [self fs_forceLayoutIfNeed];
     }
-    
 }
 
 - (void)viewDidLayoutSubviews {
@@ -233,9 +233,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
         [self.vcViewFrames addObject:[NSValue valueWithCGRect:frame]];
     }
     self.contentScrollView.contentSize = CGSizeMake(self.contentScrollView.fs_width * self.childControllerCount, self.contentScrollView.fs_height);
-    
-    
-    
+
 }
 
 
@@ -302,6 +300,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     self.titleContentView.selectedIndex = selectedIndex;
     if (_isAppear) {
         if (selectedIndex != 0) {
+            [self.contentScrollView setContentOffset:CGPointMake(selectedIndex * self.contentScrollView.fs_width - 1, 0)];  //确保走ScrollView的Delegate，解决闪屏bug
             [self.contentScrollView setContentOffset:CGPointMake(selectedIndex * self.contentScrollView.fs_width, 0)];
         }else {
             [self fs_addChildViewControllerAtIndex:selectedIndex];
@@ -321,12 +320,20 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
 
 // MARK: - Setter & Getter
 
--(void)setStyle:(FSPageViewControllerStyleOption)style {
+-(void)setStyle:(FSPageViewControllerStyle)style {
     self.titleContentView.style = style;
 }
 
-- (FSPageViewControllerStyleOption)style {
+- (FSPageViewControllerStyle)style {
     return self.titleContentView.style;
+}
+
+- (void)setScale:(BOOL)scale {
+    self.titleContentView.scale = scale;
+}
+
+- (BOOL)isScale {
+    return self.titleContentView.scale;
 }
 
 - (void)setTitleContentColor:(UIColor *)titleContentColor {
@@ -395,6 +402,14 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     return self.titleContentView.bottomLineViewColor;
 }
 
+- (void)setBottomLineWidth:(CGFloat)bottomLineWidth {
+    self.titleContentView.bottomLineWidth = bottomLineWidth;
+}
+
+
+- (CGFloat)bottomLineWidth {
+    return self.titleContentView.bottomLineWidth;
+}
 
 // MARK: - 懒加载
 
@@ -459,6 +474,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     NSUInteger index = (NSUInteger)(offsetX / scrollView.fs_width);
     
     if (!_isAppear) {  //解决闪屏的问题
+        _lastContentOffsetX = offsetX;
         return;
     }
     
@@ -469,8 +485,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     }
     
     /**********标题渐变色************/
-    CGFloat rate = offsetX / scrollView.fs_width - index;
-    [self.titleContentView updateTitleWithPorgress:rate atIndex:index];
+    [self.titleContentView scrollViewDidScroll:scrollView];
     /**********标题渐变色************/
     
     /**********vc的生命周期************/
