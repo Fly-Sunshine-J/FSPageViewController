@@ -16,6 +16,8 @@
 @property (nonatomic, strong) NSMutableArray<FSHeaderLabel *> *titleLabels;
 @property (nonatomic, strong) NSMutableArray<NSNumber *> *titleWidths;
 
+@property (nonatomic, strong) UIView *bottomLineView;
+
 @end
 
 @implementation FSTitleContentView
@@ -48,6 +50,7 @@
     [self fs_calculateFrame];
     [self fs_setUpTitles];
     self.selectedIndex = self.selectedIndex;
+
 }
 
 // MARK: - Public Method
@@ -66,11 +69,11 @@
     CGFloat titleContentViewCenterX = self.fs_width / 2;
     for (int i = 0; i < self.titleLabels.count; i++) {
         totalWidth += self.titleMargin + self.titleWidths[i].floatValue;
-        if (totalWidth <  titleContentViewCenterX || totalWidth - self.titleWidths[i].floatValue / 2 < titleContentViewCenterX) {
+        if (totalWidth - self.titleWidths[i].floatValue / 2 < titleContentViewCenterX) {
             leftShowMaxIndex = i;
             continue;
         }
-        if (self.contentSize.width - totalWidth < self.fs_width / 2 - self.titleMargin) {
+        if (self.contentSize.width - totalWidth + self.titleWidths[i].floatValue / 2 < titleContentViewCenterX - self.titleMargin) {
             rightShowMaxIndex = i;
             break;
         }
@@ -119,7 +122,7 @@
     [self.titleWidths removeAllObjects];
     CGFloat totalWidth = 0;
     for (NSString *title in self.titles) {
-        NSAssert2([title isKindOfClass:[NSString class]], @"标题必须是字符串，%@-%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+        NSAssert2([title isKindOfClass:[NSString class]], @"标题必须是字符串\n%@-%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
         CGRect titleBounds = [title boundingRectWithSize:CGSizeMake(MAXFLOAT, 0) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.titleFont} context:nil];
         [self.titleWidths addObject:@(titleBounds.size.width)];
         totalWidth += titleBounds.size.width;
@@ -162,6 +165,8 @@
     }
     FSHeaderLabel *lastLabel = [self.titleLabels lastObject];
     self.contentSize = CGSizeMake(lastLabel.fs_x + lastLabel.fs_width, _titleHeight);
+    CGFloat height = 1.0 / [UIScreen mainScreen].scale;
+    self.bottomLineView.frame = CGRectMake(0, self.fs_height - height, self.contentSize.width + self.titleMargin, height);
 }
 
 - (void)fs_setSelectedIndex:(NSInteger)selectedIndex animated:(BOOL)animated {
@@ -199,6 +204,15 @@
         _titleWidths = [NSMutableArray array];
     }
     return _titleWidths;
+}
+
+- (UIView *)bottomLineView {
+    if (!_bottomLineView) {
+        _bottomLineView = [[UIView alloc] initWithFrame:CGRectZero];
+        _bottomLineView.backgroundColor = [UIColor lightGrayColor];
+        [self addSubview:_bottomLineView];
+    }
+    return _bottomLineView;
 }
 
 // MARK: - FSHeaderLabelDelegate

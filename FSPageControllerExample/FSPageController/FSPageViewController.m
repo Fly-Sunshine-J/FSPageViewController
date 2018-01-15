@@ -69,7 +69,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
 - (instancetype)initWithClassNames:(NSArray<Class> *)classes titles:(NSArray<NSString *> *)titles {
     self = [self initWithNibName:nil bundle:nil];
     if (self) {
-        NSParameterAssert(classes.count == titles.count);
+        NSAssert2(classes.count == titles.count, @"classes的数量和titles的数量不相等\n%@-%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
         _vcClasses = [classes copy];
         _titles = [titles copy];
     }
@@ -207,10 +207,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     
     NSUInteger vcCount = self.vcClasses.count;
     
-    if (vcCount != self.titles.count) {
-        NSException *e = [NSException exceptionWithName:@"FSPageContrller" reason:@"子控制器和标题数量不相等" userInfo:nil];
-        [e raise];
-    }
+    NSAssert2(vcCount == _titles.count, @"classes的数量和titles的数量不相等/n%@-%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     
     CGFloat titleY = [[UIApplication sharedApplication] statusBarFrame].size.height;
     if (self.navigationController && !self.navigationController.navigationBarHidden) {
@@ -250,9 +247,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     }
     if (!vc) {
         Class class = self.vcClasses[index];
-        if ([class isSubclassOfClass:[UICollectionViewController class]] && [vc respondsToSelector:@selector(init)]) {
-            @throw [NSException exceptionWithName:@"FSPageViewController" reason:@"暂不支持直接UICollectionViewController及子类的设置，建议使用UICollectionView代替" userInfo:nil];
-        }
+        NSAssert2(![class isSubclassOfClass:[UICollectionViewController class]], @"暂不支持直接UICollectionViewController及子类的设置，建议使用UICollectionView代替/n%@-%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
         vc = [[class alloc] init];
         vc.title = self.titles[index];
         [self.displayVCCache setObject:vc forKey:@(index)];
@@ -392,6 +387,14 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     return self.titleContentView.titleMargin;
 }
 
+- (void)setBottomLineViewColor:(UIColor *)bottomLineViewColor {
+    self.titleContentView.bottomLineViewColor = bottomLineViewColor;
+}
+
+- (UIColor *)bottomLineViewColor {
+    return self.titleContentView.bottomLineViewColor;
+}
+
 
 // MARK: - 懒加载
 
@@ -517,7 +520,6 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     CGFloat offsetX = scrollView.contentOffset.x;
     NSUInteger index = (NSUInteger)(offsetX / scrollView.fs_width);
     _dragging = NO;
-    [self.titleContentView adjustContentTitlePositionAtIndex:index animated:YES];
     self.selectedIndex = index;
 }
 

@@ -59,8 +59,26 @@
  */
 @property (nonatomic, assign) CGFloat titleMargin;
 
+/**
+ titleContentView下方一个像素线的背景色
+ */
+@property (nonatomic, strong) UIColor *bottomLineViewColor;
+
+/**
+ 更新颜色渐变
+
+ @param progress 渐变值
+ @param index 需要渐变的位置
+ */
 - (void)updateTitleWithPorgress:(CGFloat)progress atIndex:(NSUInteger)index;
 
+
+/**
+ 保持titleLabel居中
+
+ @param index tilteLabel的位置
+ @param animated 是否需要动画
+ */
 - (void)adjustContentTitlePositionAtIndex:(NSUInteger)index animated:(BOOL)animated;
 
 @end

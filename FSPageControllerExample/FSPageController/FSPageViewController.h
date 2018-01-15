@@ -75,6 +75,12 @@ typedef NS_OPTIONS(NSInteger, FSPageViewControllerStyleOption) {
  */
 @property (nonatomic, assign) CGFloat titleMargin;
 
+
+/**
+ titleContentView下方一个像素线的背景色
+ */
+@property (nonatomic, strong) UIColor *bottomLineViewColor;
+
 /**
  修改某一个位置的标题
 
