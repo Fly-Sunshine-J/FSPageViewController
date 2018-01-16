@@ -203,10 +203,8 @@
 }
 
 - (void)fs_changeTitleWithIndex:(NSUInteger)selectedIndex {
-    [UIView animateWithDuration:0.25 animations:^{
-        self.titleLabels[_selectedIndex].progress = 1;
-        self.titleLabels[selectedIndex].progress = 0;
-    }];
+    self.titleLabels[_selectedIndex].progress = 1.0;
+    self.titleLabels[selectedIndex].progress = 0.0;
     FSHeaderLabel *lastLabel = self.titleLabels[_selectedIndex];
     lastLabel.normalColor = self.titleNormalColor;
     lastLabel.selectedColor = self.titleSelectedColor;

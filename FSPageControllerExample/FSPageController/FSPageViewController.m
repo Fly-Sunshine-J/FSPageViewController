@@ -243,8 +243,12 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     }
     if (!vc) {
         Class class = self.vcClasses[index];
-        NSAssert2(![class isSubclassOfClass:[UICollectionViewController class]], @"暂不支持直接UICollectionViewController及子类的设置，建议使用UICollectionView代替/n%@-%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-        vc = [[class alloc] init];
+        @try {
+            vc = [[class alloc] init];
+        }@catch(NSException *) {
+            NSAssert2(![class isSubclassOfClass:[UICollectionViewController class]], @"暂不支持直接UICollectionViewController及子类的设置，建议使用UICollectionView代替或者重写UICollectionViewController的init方法/n%@-%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+        }
+        
         vc.title = self.titles[index];
         [self.displayVCCache setObject:vc forKey:@(index)];
     }
