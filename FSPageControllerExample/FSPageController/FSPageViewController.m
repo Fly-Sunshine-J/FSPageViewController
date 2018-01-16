@@ -411,6 +411,22 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     return self.titleContentView.bottomLineWidth;
 }
 
+- (void)setProgressTintColor:(UIColor *)progressTintColor {
+    self.titleContentView.progressTintColor = progressTintColor;
+}
+
+- (UIColor *)progressTintColor {
+    return self.titleContentView.progressTintColor;
+}
+
+- (void)setCornerRadius:(CGFloat)cornerRadius {
+    self.titleContentView.cornerRadius = cornerRadius;
+}
+
+- (CGFloat)cornerRadius {
+    return self.titleContentView.cornerRadius;
+}
+
 // MARK: - 懒加载
 
 - (UIView *)contentView {

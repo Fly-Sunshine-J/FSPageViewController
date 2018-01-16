@@ -79,16 +79,22 @@
     [self fs_setSelectedIndex:selectedIndex animated:YES];
 }
 
-- (void)setStyle:(FSPageViewControllerStyle)style {
-    _style = style;
-}
-
 - (void)setScale:(BOOL)scale {
     _scale = scale;
     for (FSHeaderLabel *lable in self.titleLabels) {
         lable.scale = scale;
     }
 }
+
+- (void)setProgressTintColor:(UIColor *)progressTintColor {
+    _progressTintColor = progressTintColor;
+    self.progressView.color = progressTintColor;
+}
+
+- (void)setTitleMargin:(CGFloat)titleMargin {
+    _titleMargin = titleMargin;
+}
+
 
 
 // MARK: - Private Method
@@ -105,8 +111,9 @@
     }
     if (FSScreenW > totalWidth) {
         CGFloat titleMargin = (FSScreenW - totalWidth) / (self.titles.count + 1);
-        _titleMargin = titleMargin > _titleMargin ? titleMargin : _titleMargin;
+        _titleMargin = titleMargin >= _titleMargin ? titleMargin : _titleMargin;
     }
+    
     self.contentInset = UIEdgeInsetsMake(0, 0, 0, _titleMargin);
 }
 
@@ -129,7 +136,7 @@
         titleLabelW = [self.titleWidths[i] floatValue];
         titleLabelX = lastLabel.fs_x + lastLabel.fs_width + self.titleMargin;
         titleLabelY = (self.titleHeight - titleLabelH) / 2;
-        CGRect frame = CGRectMake(titleLabelX, titleLabelY, titleLabelW, titleLabelH);
+        CGRect frame = CGRectMake(titleLabelX, 0, titleLabelW, self.titleHeight);
         [self.titleFrames addObject:[NSValue valueWithCGRect:frame]];
         FSHeaderLabel *currentLabel = [[FSHeaderLabel alloc] initWithFrame:frame];
         currentLabel.text = self.titles[i];
@@ -158,18 +165,25 @@
         return;
     }
     CGRect frame  = CGRectZero;
-    CGRect currentFrame = self.titleFrames[self.selectedIndex].CGRectValue;
-    CGFloat height = 2;
     if (isLine) {
+        CGFloat height = 2;
         frame = CGRectMake(0, self.fs_height - height, self.bottomLineView.fs_width, height);
         self.progressView.line = isLine;
     }else {
-        CGFloat x = currentFrame.origin.x - self.titleMargin / 2;
-        CGFloat y = currentFrame.origin.y / 2;
-        CGFloat w = self.contentSize.width;
-        CGFloat h = currentFrame.size.height + currentFrame.origin.y;
+        CGFloat x = 0;
+        CGFloat y = (self.fs_height - self.titleLabelHeight) / 4;
+        CGFloat w = self.bottomLineView.fs_width;
+        CGFloat h = self.fs_height - y * 2;
         frame = CGRectMake(x, y, w, h);
+        self.progressView.cornerRadius = h / 3;
+        if (self.style == FSPageViewControllerStyleHollow) {
+            self.progressView.hollow = YES;
+        }else if (self.style == FSPageViewControllerStyleFill) {
+            self.progressTintColor = [UIColor lightGrayColor];
+            self.progressView.fill = YES;
+        }
     }
+    
     self.progressView.color = self.progressTintColor;
     self.progressView.titleMargin = self.titleMargin;
     self.progressView.frame = frame;
@@ -181,9 +195,8 @@
     if (self.titleLabels.count) {
         [self fs_changeTitleWithIndex:selectedIndex];
         [self fs_adjustContentTitlePositionAtIndex:selectedIndex animated:animated];
-        self.titleLabels[selectedIndex].progress = 0.0;
-        if (_progressView) {
-            _progressView.progress = selectedIndex;
+        if (self.progressView) {
+            self.progressView.progress = selectedIndex;
         }
     }
     _selectedIndex = selectedIndex;
@@ -294,6 +307,7 @@
     CGFloat rate = offsetX / scrollView.fs_width - index;
     [self fs_updateTitleWithPorgress:rate atIndex:index];
     self.progressView.progress = offsetX / scrollView.fs_width;
+    NSLog(@"%f", self.progressView.progress);
 }
 
 
@@ -312,7 +326,10 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:FSPageViewControllerDidClickCurrentTitleNotification object:self userInfo:@{FSPageViewControllerCurrentIndexKey:@(index)}];;
         return;
     }
-    self.selectedIndex = index;
+    [self fs_changeTitleWithIndex:index];
+    [self fs_adjustContentTitlePositionAtIndex:index animated:YES];
+    _selectedIndex = index;
+    [self.progressView moveToPosition:index];
     if ([self.fs_delegate respondsToSelector:@selector(contentViewTitleClick:atIndex:)]) {
         [self.fs_delegate contentViewTitleClick:self atIndex:index];
     }

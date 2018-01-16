@@ -28,6 +28,13 @@
         sub.view.backgroundColor = [UIColor whiteColor];
         if (i == 2) {
             sub = [[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
+            NormalViewController *sub1 = (NormalViewController *)sub;
+            sub1.selectedIndex = 2;
+            sub1.titleHeight = 50;
+            sub1.titleMargin = 50;
+            sub1.titleContentColor = [UIColor yellowColor];
+            sub1.scale = YES;
+            sub1.style = FSPageViewControllerStyleFill;
         }
         sub.title = [NSString stringWithFormat:@"Tab%@", @(i)];
         [self addChildViewController:sub];

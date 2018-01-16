@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, FSPageViewControllerStyle) {
     FSPageViewControllerStyleDefaul,
     FSPageViewControllerStyleLine,
     FSPageViewControllerStyleHollow,
+    FSPageViewControllerStyleFill,
 };
 
 @interface FSPageViewController : UIViewController
@@ -91,6 +92,19 @@ typedef NS_ENUM(NSInteger, FSPageViewControllerStyle) {
  titleContentView下方一个线条的宽度，默认一个像素
  */
 @property (nonatomic, assign) CGFloat bottomLineWidth;
+
+
+/**
+ FSPageViewControllerStyleLine & FSPageViewControllerStyleHollow样式中线条的颜色和FSPageViewControllerStyleFill样式的填充色
+ */
+@property (nonatomic, strong) UIColor *progressTintColor;
+
+
+/**
+ FSPageViewControllerStyleHollow & FSPageViewControllerStyleFill样式中圆角的角度
+ */
+@property (nonatomic, assign) CGFloat cornerRadius;
+
 
 /**
  修改某一个位置的标题

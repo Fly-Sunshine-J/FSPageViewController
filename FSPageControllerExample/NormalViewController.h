@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FSPageViewController.h"
+#import <FSPageController/FSPageViewController.h>
 
 @interface NormalViewController : FSPageViewController
 

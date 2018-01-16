@@ -10,6 +10,17 @@
 		D72165B820049E1700E76DFF /* UIViewController+FSPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D72165B720049E1700E76DFF /* UIViewController+FSPageViewController.m */; };
 		D72165BB2004B25100E76DFF /* NewSubViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D72165BA2004B25100E76DFF /* NewSubViewController.m */; };
 		D73D5D5D200C72F50084B1F9 /* FSProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = D73D5D5C200C72F50084B1F9 /* FSProgressView.m */; };
+		D75932FF200DE14F006FEF9C /* FSPageController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D75932F6200DE14F006FEF9C /* FSPageController.framework */; };
+		D7593306200DE14F006FEF9C /* FSPageControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D7593305200DE14F006FEF9C /* FSPageControllerTests.m */; };
+		D7593308200DE14F006FEF9C /* FSPageController.h in Headers */ = {isa = PBXBuildFile; fileRef = D75932F8200DE14F006FEF9C /* FSPageController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D759330B200DE14F006FEF9C /* FSPageController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D75932F6200DE14F006FEF9C /* FSPageController.framework */; };
+		D759330C200DE14F006FEF9C /* FSPageController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D75932F6200DE14F006FEF9C /* FSPageController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D7593314200DE19F006FEF9C /* FSHeaderLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = D759DA9A1FFCB44200476E28 /* FSHeaderLabel.h */; };
+		D7593315200DE19F006FEF9C /* FSTitleContentView.h in Headers */ = {isa = PBXBuildFile; fileRef = D76B89BD20087D7E0083F4F6 /* FSTitleContentView.h */; };
+		D7593316200DE19F006FEF9C /* FSProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = D73D5D5B200C72F50084B1F9 /* FSProgressView.h */; };
+		D7593317200DE19F006FEF9C /* UIView+FSFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = D759DA9D1FFCB67800476E28 /* UIView+FSFrame.h */; };
+		D7593318200DE1AB006FEF9C /* FSPageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D759DAA31FFCCBE100476E28 /* FSPageViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D7593319200DE1AB006FEF9C /* UIViewController+FSPageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D72165B620049E1700E76DFF /* UIViewController+FSPageViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D759DA691FFCB22E00476E28 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D759DA681FFCB22E00476E28 /* AppDelegate.m */; };
 		D759DA6C1FFCB22E00476E28 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D759DA6B1FFCB22E00476E28 /* ViewController.m */; };
 		D759DA6F1FFCB22E00476E28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D759DA6D1FFCB22E00476E28 /* Main.storyboard */; };
@@ -31,6 +42,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D7593300200DE14F006FEF9C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D759DA5C1FFCB22D00476E28 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D75932F5200DE14F006FEF9C;
+			remoteInfo = FSPageController;
+		};
+		D7593302200DE14F006FEF9C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D759DA5C1FFCB22D00476E28 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D759DA631FFCB22E00476E28;
+			remoteInfo = FSPageControllerExample;
+		};
+		D7593309200DE14F006FEF9C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D759DA5C1FFCB22D00476E28 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D75932F5200DE14F006FEF9C;
+			remoteInfo = FSPageController;
+		};
 		D759DA7D1FFCB22E00476E28 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D759DA5C1FFCB22D00476E28 /* Project object */;
@@ -47,6 +79,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D7593312200DE14F006FEF9C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D759330C200DE14F006FEF9C /* FSPageController.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		D72165B620049E1700E76DFF /* UIViewController+FSPageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+FSPageViewController.h"; sourceTree = "<group>"; };
 		D72165B720049E1700E76DFF /* UIViewController+FSPageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+FSPageViewController.m"; sourceTree = "<group>"; };
@@ -54,6 +100,12 @@
 		D72165BA2004B25100E76DFF /* NewSubViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewSubViewController.m; sourceTree = "<group>"; };
 		D73D5D5B200C72F50084B1F9 /* FSProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSProgressView.h; sourceTree = "<group>"; };
 		D73D5D5C200C72F50084B1F9 /* FSProgressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FSProgressView.m; sourceTree = "<group>"; };
+		D75932F6200DE14F006FEF9C /* FSPageController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FSPageController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D75932F8200DE14F006FEF9C /* FSPageController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSPageController.h; sourceTree = "<group>"; };
+		D75932F9200DE14F006FEF9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D75932FE200DE14F006FEF9C /* FSPageControllerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FSPageControllerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7593305200DE14F006FEF9C /* FSPageControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FSPageControllerTests.m; sourceTree = "<group>"; };
+		D7593307200DE14F006FEF9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D759DA641FFCB22E00476E28 /* FSPageControllerExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FSPageControllerExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D759DA671FFCB22E00476E28 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		D759DA681FFCB22E00476E28 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -93,10 +145,26 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D75932F2200DE14F006FEF9C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D75932FB200DE14F006FEF9C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D75932FF200DE14F006FEF9C /* FSPageController.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D759DA611FFCB22E00476E28 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D759330B200DE14F006FEF9C /* FSPageController.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,12 +185,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D75932F7200DE14F006FEF9C /* FSPageController */ = {
+			isa = PBXGroup;
+			children = (
+				D75932F8200DE14F006FEF9C /* FSPageController.h */,
+				D75932F9200DE14F006FEF9C /* Info.plist */,
+			);
+			path = FSPageController;
+			sourceTree = "<group>";
+		};
+		D7593304200DE14F006FEF9C /* FSPageControllerTests */ = {
+			isa = PBXGroup;
+			children = (
+				D7593305200DE14F006FEF9C /* FSPageControllerTests.m */,
+				D7593307200DE14F006FEF9C /* Info.plist */,
+			);
+			path = FSPageControllerTests;
+			sourceTree = "<group>";
+		};
 		D759DA5B1FFCB22D00476E28 = {
 			isa = PBXGroup;
 			children = (
 				D759DA661FFCB22E00476E28 /* FSPageControllerExample */,
 				D759DA7F1FFCB22E00476E28 /* FSPageControllerExampleTests */,
 				D759DA8A1FFCB22E00476E28 /* FSPageControllerExampleUITests */,
+				D75932F7200DE14F006FEF9C /* FSPageController */,
+				D7593304200DE14F006FEF9C /* FSPageControllerTests */,
 				D759DA651FFCB22E00476E28 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -133,6 +221,8 @@
 				D759DA641FFCB22E00476E28 /* FSPageControllerExample.app */,
 				D759DA7C1FFCB22E00476E28 /* FSPageControllerExampleTests.xctest */,
 				D759DA871FFCB22E00476E28 /* FSPageControllerExampleUITests.xctest */,
+				D75932F6200DE14F006FEF9C /* FSPageController.framework */,
+				D75932FE200DE14F006FEF9C /* FSPageControllerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -207,7 +297,61 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		D75932F3200DE14F006FEF9C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D7593308200DE14F006FEF9C /* FSPageController.h in Headers */,
+				D7593318200DE1AB006FEF9C /* FSPageViewController.h in Headers */,
+				D7593319200DE1AB006FEF9C /* UIViewController+FSPageViewController.h in Headers */,
+				D7593314200DE19F006FEF9C /* FSHeaderLabel.h in Headers */,
+				D7593315200DE19F006FEF9C /* FSTitleContentView.h in Headers */,
+				D7593316200DE19F006FEF9C /* FSProgressView.h in Headers */,
+				D7593317200DE19F006FEF9C /* UIView+FSFrame.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		D75932F5200DE14F006FEF9C /* FSPageController */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D7593311200DE14F006FEF9C /* Build configuration list for PBXNativeTarget "FSPageController" */;
+			buildPhases = (
+				D75932F1200DE14F006FEF9C /* Sources */,
+				D75932F2200DE14F006FEF9C /* Frameworks */,
+				D75932F3200DE14F006FEF9C /* Headers */,
+				D75932F4200DE14F006FEF9C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FSPageController;
+			productName = FSPageController;
+			productReference = D75932F6200DE14F006FEF9C /* FSPageController.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		D75932FD200DE14F006FEF9C /* FSPageControllerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D7593313200DE14F006FEF9C /* Build configuration list for PBXNativeTarget "FSPageControllerTests" */;
+			buildPhases = (
+				D75932FA200DE14F006FEF9C /* Sources */,
+				D75932FB200DE14F006FEF9C /* Frameworks */,
+				D75932FC200DE14F006FEF9C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D7593301200DE14F006FEF9C /* PBXTargetDependency */,
+				D7593303200DE14F006FEF9C /* PBXTargetDependency */,
+			);
+			name = FSPageControllerTests;
+			productName = FSPageControllerTests;
+			productReference = D75932FE200DE14F006FEF9C /* FSPageControllerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		D759DA631FFCB22E00476E28 /* FSPageControllerExample */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D759DA901FFCB22E00476E28 /* Build configuration list for PBXNativeTarget "FSPageControllerExample" */;
@@ -215,10 +359,12 @@
 				D759DA601FFCB22E00476E28 /* Sources */,
 				D759DA611FFCB22E00476E28 /* Frameworks */,
 				D759DA621FFCB22E00476E28 /* Resources */,
+				D7593312200DE14F006FEF9C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D759330A200DE14F006FEF9C /* PBXTargetDependency */,
 			);
 			name = FSPageControllerExample;
 			productName = FSPageControllerExample;
@@ -270,6 +416,15 @@
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = vcyber;
 				TargetAttributes = {
+					D75932F5200DE14F006FEF9C = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Manual;
+					};
+					D75932FD200DE14F006FEF9C = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
+						TestTargetID = D759DA631FFCB22E00476E28;
+					};
 					D759DA631FFCB22E00476E28 = {
 						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Manual;
@@ -302,11 +457,27 @@
 				D759DA631FFCB22E00476E28 /* FSPageControllerExample */,
 				D759DA7B1FFCB22E00476E28 /* FSPageControllerExampleTests */,
 				D759DA861FFCB22E00476E28 /* FSPageControllerExampleUITests */,
+				D75932F5200DE14F006FEF9C /* FSPageController */,
+				D75932FD200DE14F006FEF9C /* FSPageControllerTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D75932F4200DE14F006FEF9C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D75932FC200DE14F006FEF9C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D759DA621FFCB22E00476E28 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -335,6 +506,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D75932F1200DE14F006FEF9C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D75932FA200DE14F006FEF9C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D7593306200DE14F006FEF9C /* FSPageControllerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D759DA601FFCB22E00476E28 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -376,6 +562,21 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		D7593301200DE14F006FEF9C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D75932F5200DE14F006FEF9C /* FSPageController */;
+			targetProxy = D7593300200DE14F006FEF9C /* PBXContainerItemProxy */;
+		};
+		D7593303200DE14F006FEF9C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D759DA631FFCB22E00476E28 /* FSPageControllerExample */;
+			targetProxy = D7593302200DE14F006FEF9C /* PBXContainerItemProxy */;
+		};
+		D759330A200DE14F006FEF9C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D75932F5200DE14F006FEF9C /* FSPageController */;
+			targetProxy = D7593309200DE14F006FEF9C /* PBXContainerItemProxy */;
+		};
 		D759DA7E1FFCB22E00476E28 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D759DA631FFCB22E00476E28 /* FSPageControllerExample */;
@@ -408,6 +609,82 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		D759330D200DE14F006FEF9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = FSPageController/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cyw.FSPageController;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		D759330E200DE14F006FEF9C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = FSPageController/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cyw.FSPageController;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		D759330F200DE14F006FEF9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = FSPageControllerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cyw.FSPageControllerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FSPageControllerExample.app/FSPageControllerExample";
+			};
+			name = Debug;
+		};
+		D7593310200DE14F006FEF9C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = FSPageControllerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cyw.FSPageControllerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FSPageControllerExample.app/FSPageControllerExample";
+			};
+			name = Release;
+		};
 		D759DA8E1FFCB22E00476E28 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -602,6 +879,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D7593311200DE14F006FEF9C /* Build configuration list for PBXNativeTarget "FSPageController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D759330D200DE14F006FEF9C /* Debug */,
+				D759330E200DE14F006FEF9C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D7593313200DE14F006FEF9C /* Build configuration list for PBXNativeTarget "FSPageControllerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D759330F200DE14F006FEF9C /* Debug */,
+				D7593310200DE14F006FEF9C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D759DA5F1FFCB22D00476E28 /* Build configuration list for PBXProject "FSPageControllerExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -63,7 +63,7 @@
 //        NormalViewController *sub = [[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
         NormalViewController *sub = [[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:sub];
-        sub.style = FSPageViewControllerStyleLine;
+        sub.style = FSPageViewControllerStyleHollow;
         [self presentViewController:nav animated:YES completion:nil];
     }else if (indexPath.row == 2) {
         TabViewController *tab = [[TabViewController alloc] init];

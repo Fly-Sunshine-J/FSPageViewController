@@ -75,10 +75,14 @@
  */
 @property (nonatomic, assign) CGFloat bottomLineWidth;
 
-
 /**
  ProgressView的TintColor
  */
 @property (nonatomic, strong) UIColor *progressTintColor;
+
+/**
+ progressView的圆角角度
+ */
+@property (nonatomic, assign) CGFloat cornerRadius;
 
 @end
