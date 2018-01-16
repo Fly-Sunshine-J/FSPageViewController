@@ -205,9 +205,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
 // 计算frame
 - (void)fs_calculateFrames {
     
-    NSUInteger vcCount = self.vcClasses.count;
-    
-    NSAssert2(vcCount == _titles.count, @"classes的数量和titles的数量不相等/n%@-%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    NSAssert2(self.childControllerCount == _titles.count, @"classes的数量和titles的数量不相等/n%@-%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     
     CGFloat titleY = [[UIApplication sharedApplication] statusBarFrame].size.height;
     if (self.navigationController && !self.navigationController.navigationBarHidden) {

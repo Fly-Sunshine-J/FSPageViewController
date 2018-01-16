@@ -34,7 +34,7 @@
 
 // MARK: -Public Method
 - (void)moveToPosition:(CGFloat)pos {
-    self.distance = fabsf(pos - self.progress);
+    self.distance = fabs(pos - self.progress);
     self.sign = pos > self.progress ? 1 : -1;
     self.step = self.distance * 0.05;
     if (_link) {
