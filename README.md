@@ -31,6 +31,16 @@
 
 ## Using CocoaPods
 
+```
+target 'projectName' do
+use_frameworks!
+pod 'FSPageController', '~> 1.0.0'
+end
+
+```
+#### Tip
+如果不能search到，请更新cocoapods库 , ``pod setup``
+如果还搜索不到，删除~/Library/Caches/CocoaPods目录下的search_index.json文件 再search
 
 
 ## Usage
