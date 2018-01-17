@@ -93,10 +93,10 @@ LICENSE
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "FSPageControllerExample/FSPageController/{UI,FS}*.{h,m}"
+  s.source_files  = "FSPageController/{UI,FS}*.{h,m}"
 
 
-  # s.public_header_files = "Classes/**/*.h"
+  # s.public_header_files = "FSPageController/*.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

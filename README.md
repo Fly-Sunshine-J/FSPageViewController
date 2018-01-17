@@ -1,9 +1,10 @@
-### FSPageViewController
+# FSPageViewController
 
-#### 简介
+## Introduction
 
-这是一个开源的分页控制器，完美的模拟了UIViewController的生命周期方法，支持横竖屏，标题的颜色渐变和标题选中放大效果。特效不多，后期继续添加效果。先放几张动图让大家看看效果。（动图背景色忘了修改，大家凑合看吧，不想重新录制了）
+这是一个开源的分页控制器，完美的模拟了UIViewController的生命周期方法，支持横竖屏。目前效果有一下动图中的三种，特效不多，后期继续添加效果。先放几张动图让大家看看效果。）
 
+## Overview
 ##### iPhone X + iOS11
 
 ![Normal.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/blob/master/gif/Normal.gif)
@@ -24,15 +25,17 @@
 
 ![NavigationBar+TabBar+iOS8.1.gif](https://github.com/Fly-Sunshine-J/FSPageViewController/blob/master/gif/NavigationBar+TabBar+iOS8.1.gif)
 
-#### 用法
+## List
 
-先看一下核心目录
+![FSPageViewController目录.png](http://upload-images.jianshu.io/upload_images/1771887-b688c146e14acf33.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-![FSPageViewController目录.png](http://upload-images.jianshu.io/upload_images/1771887-8481553796ce1ce9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+## Using CocoaPods
 
-用法很简单了：
 
-使用FSPageViewController特定初始化方法，保证类数组数量和标题数量相等，然后可以设置相关的属性，达到自己想要的效果，就是这样简单。当然也可以继承使用。
+
+## Usage
+
+使用FSPageViewController特定初始化方法，保证类数组数量和标题数量相等，然后可以设置相关的属性，达到自己想要的效果，设置属性需要在push或者present之前。就是这样简单。当然也可以继承使用。
 
 ```
 @param classes UIViewController的类数组
@@ -40,7 +43,22 @@
 - (instancetype)initWithClassNames:(NSArray <Class>*)classes titles:(NSArray <NSString *> *)titles NS_DESIGNATED_INITIALIZER;
 ```
 
-#### 总结
+### Remind
+如果你想使用UICollectionViewController，你可以重写UICollectionViewController的init方法，因为UICollectionViewController初始化需要UICollectionViewLayout布局对象。重写init方法，设置布局。
+example：
+``` objective-c
+- (instancetype)init {
+// init layout here...
+self = [self initWithCollectionViewLayout:layout];
+if (self) {
+// insert code here...
+}
+return self;
+}
+
+```
+
+## 总结
 
 喜欢的欢迎star，需要效果的请在[简书](https://www.jianshu.com/p/3e86ac9799a1)下留言或者github issure。Demo中真机返回上一页请摇一摇，模拟器请command+control+z。
 
