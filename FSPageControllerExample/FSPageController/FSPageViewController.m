@@ -499,6 +499,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     }
     
     if (!_dragging) {
+        self.titleContentView.userInteractionEnabled = YES;
         _lastContentOffsetX = offsetX;
         [self fs_addViewOrViewControllerAtIndex:index];
         return;
