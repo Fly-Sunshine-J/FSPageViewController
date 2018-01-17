@@ -64,6 +64,9 @@
         NormalViewController *sub = [[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:sub];
         sub.style = FSPageViewControllerStyleHollow;
+        sub.titleSelectedColor = [UIColor cyanColor];
+        sub.titleNormalColor = [UIColor redColor];
+        sub.progressTintColor = [UIColor greenColor];
         [self presentViewController:nav animated:YES completion:nil];
     }else if (indexPath.row == 2) {
         TabViewController *tab = [[TabViewController alloc] init];

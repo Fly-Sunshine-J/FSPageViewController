@@ -179,7 +179,9 @@
         if (self.style == FSPageViewControllerStyleHollow) {
             self.progressView.hollow = YES;
         }else if (self.style == FSPageViewControllerStyleFill) {
-            self.progressTintColor = [UIColor lightGrayColor];
+            if ([self.progressTintColor isEqual:self.titleSelectedColor]) {
+                self.progressTintColor = [UIColor lightGrayColor];
+            }
             self.progressView.fill = YES;
         }
     }
@@ -305,7 +307,6 @@
     CGFloat rate = offsetX / scrollView.fs_width - index;
     [self fs_updateTitleWithPorgress:rate atIndex:index];
     self.progressView.progress = offsetX / scrollView.fs_width;
-    NSLog(@"%f", self.progressView.progress);
 }
 
 

@@ -231,7 +231,8 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
         [self.vcViewFrames addObject:[NSValue valueWithCGRect:frame]];
     }
     self.contentScrollView.contentSize = CGSizeMake(self.contentScrollView.fs_width * self.childControllerCount, self.contentScrollView.fs_height);
-
+//    解决屏幕闪烁的bug
+    self.displayVCCache[@(self.selectedIndex)].view.frame = self.vcViewFrames[self.selectedIndex].CGRectValue;
 }
 
 
@@ -302,7 +303,6 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     self.titleContentView.selectedIndex = selectedIndex;
     if (_isAppear) {
         if (selectedIndex != 0) {
-            [self.contentScrollView setContentOffset:CGPointMake(selectedIndex * self.contentScrollView.fs_width - 1, 0)];  //确保走ScrollView的Delegate，解决闪屏bug
             [self.contentScrollView setContentOffset:CGPointMake(selectedIndex * self.contentScrollView.fs_width, 0)];
         }else {
             [self fs_addChildViewControllerAtIndex:selectedIndex];
@@ -364,6 +364,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
 }
 
 - (void)setTitleSelectedColor:(UIColor *)titleSelectedColor {
+    self.progressTintColor = titleSelectedColor;
     self.titleContentView.titleSelectedColor = titleSelectedColor;
 }
 
@@ -488,6 +489,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
 // MARK: - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    self.titleContentView.userInteractionEnabled = NO;
     CGFloat offsetX = scrollView.contentOffset.x;
     NSUInteger index = (NSUInteger)(offsetX / scrollView.fs_width);
     
@@ -554,6 +556,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     NSUInteger index = (NSUInteger)(offsetX / scrollView.fs_width);
     _dragging = NO;
     self.selectedIndex = index;
+    self.titleContentView.userInteractionEnabled = YES;
 }
 
 // MARK: - FSTitleContentViewDelegate

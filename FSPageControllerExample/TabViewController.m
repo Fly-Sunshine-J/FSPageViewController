@@ -35,6 +35,7 @@
             sub1.titleContentColor = [UIColor yellowColor];
             sub1.scale = YES;
             sub1.style = FSPageViewControllerStyleFill;
+            sub1.progressTintColor = [UIColor greenColor];
         }
         sub.title = [NSString stringWithFormat:@"Tab%@", @(i)];
         [self addChildViewController:sub];

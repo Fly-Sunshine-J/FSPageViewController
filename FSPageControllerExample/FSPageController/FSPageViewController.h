@@ -95,7 +95,8 @@ typedef NS_ENUM(NSInteger, FSPageViewControllerStyle) {
 
 
 /**
- FSPageViewControllerStyleLine & FSPageViewControllerStyleHollow样式中线条的颜色和FSPageViewControllerStyleFill样式的填充色
+ FSPageViewControllerStyleLine & FSPageViewControllerStyleHollow样式中线条的颜色 默认和选中字体颜色保持一致
+ FSPageViewControllerStyleFill样式的填充色 默认是[UIColor lightGrayColor]
  */
 @property (nonatomic, strong) UIColor *progressTintColor;
 
