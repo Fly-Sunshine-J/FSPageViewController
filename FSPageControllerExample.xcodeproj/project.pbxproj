@@ -25,14 +25,14 @@
 		D75ACA902006102800BFB81D /* CollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D75ACA8F2006102800BFB81D /* CollectionViewController.m */; };
 		D75ACA93200613BE00BFB81D /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D75ACA92200613BE00BFB81D /* TableViewController.m */; };
 		D75ACA952006144600BFB81D /* EmoticonQQ.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D75ACA942006144200BFB81D /* EmoticonQQ.bundle */; };
+		D76EC44420109E9400A9F20E /* FSHeaderLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D78E80C3200EF6ED0062213A /* FSHeaderLabel.m */; };
+		D76EC44520109EA100A9F20E /* FSPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D78E80C7200EF6ED0062213A /* FSPageViewController.m */; };
+		D76EC44620109EA400A9F20E /* FSProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = D78E80C9200EF6ED0062213A /* FSProgressView.m */; };
+		D76EC44720109EA600A9F20E /* FSTitleContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = D78E80CB200EF6ED0062213A /* FSTitleContentView.m */; };
+		D76EC44820109EA900A9F20E /* UIView+FSFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = D78E80CE200EF6ED0062213A /* UIView+FSFrame.m */; };
+		D76EC44920109EAC00A9F20E /* UIViewController+FSPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D78E80D0200EF6ED0062213A /* UIViewController+FSPageViewController.m */; };
 		D788757F1FFDF75A001E8430 /* TabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D788757E1FFDF75A001E8430 /* TabViewController.m */; };
 		D78875821FFE0124001E8430 /* NormalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D78875811FFE0124001E8430 /* NormalViewController.m */; };
-		D78E80D1200EF6FC0062213A /* FSHeaderLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D78E80C3200EF6ED0062213A /* FSHeaderLabel.m */; };
-		D78E80D2200EF7010062213A /* FSPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D78E80C7200EF6ED0062213A /* FSPageViewController.m */; };
-		D78E80D3200EF7050062213A /* FSProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = D78E80C9200EF6ED0062213A /* FSProgressView.m */; };
-		D78E80D4200EF7080062213A /* FSTitleContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = D78E80CB200EF6ED0062213A /* FSTitleContentView.m */; };
-		D78E80D5200EF70B0062213A /* UIView+FSFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = D78E80CE200EF6ED0062213A /* UIView+FSFrame.m */; };
-		D78E80D6200EF70D0062213A /* UIViewController+FSPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D78E80D0200EF6ED0062213A /* UIViewController+FSPageViewController.m */; };
 		D78E80D7200EF7250062213A /* FSHeaderLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = D78E80C2200EF6ED0062213A /* FSHeaderLabel.h */; };
 		D78E80D8200EF7250062213A /* FSMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = D78E80C4200EF6ED0062213A /* FSMacro.h */; };
 		D78E80D9200EF7250062213A /* FSProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = D78E80C8200EF6ED0062213A /* FSProgressView.h */; };
@@ -516,6 +516,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D76EC44720109EA600A9F20E /* FSTitleContentView.m in Sources */,
+				D76EC44920109EAC00A9F20E /* UIViewController+FSPageViewController.m in Sources */,
+				D76EC44520109EA100A9F20E /* FSPageViewController.m in Sources */,
+				D76EC44820109EA900A9F20E /* UIView+FSFrame.m in Sources */,
+				D76EC44420109E9400A9F20E /* FSHeaderLabel.m in Sources */,
+				D76EC44620109EA400A9F20E /* FSProgressView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -531,8 +537,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D78E80D1200EF6FC0062213A /* FSHeaderLabel.m in Sources */,
-				D78E80D6200EF70D0062213A /* UIViewController+FSPageViewController.m in Sources */,
 				D788757F1FFDF75A001E8430 /* TabViewController.m in Sources */,
 				D759DA6C1FFCB22E00476E28 /* ViewController.m in Sources */,
 				D78875821FFE0124001E8430 /* NormalViewController.m in Sources */,
@@ -540,12 +544,8 @@
 				D759DA771FFCB22E00476E28 /* main.m in Sources */,
 				D759DA691FFCB22E00476E28 /* AppDelegate.m in Sources */,
 				D75ACA902006102800BFB81D /* CollectionViewController.m in Sources */,
-				D78E80D3200EF7050062213A /* FSProgressView.m in Sources */,
-				D78E80D5200EF70B0062213A /* UIView+FSFrame.m in Sources */,
-				D78E80D4200EF7080062213A /* FSTitleContentView.m in Sources */,
 				D72165BB2004B25100E76DFF /* NewSubViewController.m in Sources */,
 				D759DAAB1FFCDCFE00476E28 /* SubViewController.m in Sources */,
-				D78E80D2200EF7010062213A /* FSPageViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

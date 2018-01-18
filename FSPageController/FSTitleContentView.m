@@ -18,7 +18,7 @@
 @property (nonatomic, strong) NSMutableArray<NSNumber *> *titleWidths;
 @property (nonatomic, strong) NSMutableArray<NSValue *> *titleFrames;
 
-@property (nonatomic, assign) CGFloat titleLabelHeight;
+@property (nonatomic, assign) CGFloat titleFontHeight;
 
 @property (nonatomic, strong) UIView *bottomLineView;
 @property (nonatomic, strong) FSProgressView *progressView;
@@ -106,7 +106,7 @@
         NSAssert2([title isKindOfClass:[NSString class]], @"标题必须是字符串\n%@-%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
         CGRect titleBounds = [title boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.titleFont} context:nil];
         [self.titleWidths addObject:@(titleBounds.size.width)];
-        _titleLabelHeight = titleBounds.size.height;
+        self.titleFontHeight = titleBounds.size.height;
         totalWidth += titleBounds.size.width;
     }
     if (FSScreenW > totalWidth) {
@@ -130,7 +130,7 @@
     [self.titleFrames removeAllObjects];
     
     CGFloat titleLabelW, titleLabelH, titleLabelX, titleLabelY;
-    titleLabelH = _titleLabelHeight;
+    titleLabelH = self.titleFontHeight;
     for (int i = 0; i < count; i++) {
         FSHeaderLabel *lastLabel = [self.titleLabels lastObject];
         titleLabelW = [self.titleWidths[i] floatValue];
@@ -171,7 +171,7 @@
         self.progressView.line = isLine;
     }else {
         CGFloat x = 0;
-        CGFloat y = (self.fs_height - self.titleLabelHeight) / 4;
+        CGFloat y = (self.fs_height - self.titleFontHeight) / 4;
         CGFloat w = self.bottomLineView.fs_width;
         CGFloat h = self.fs_height - y * 2;
         frame = CGRectMake(x, y, w, h);

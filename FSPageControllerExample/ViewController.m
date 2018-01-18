@@ -58,7 +58,6 @@
         sub.style = FSPageViewControllerStyleLine;
 //        sub.bottomLineViewColor = [UIColor redColor];
 //        sub.bottomLineWidth = 5;
-//        UICollectionViewController
         [self presentViewController:sub animated:YES completion:nil];
     }else if (indexPath.row == 1) {
 //        NormalViewController *sub = [[NormalViewController alloc] initWithClassNames:@[[SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class], [CollectionViewController class], [SubViewController class], [TableViewController class]] titles:@[@"页面A", @"页面AA", @"页面AAA", @"页面AAAA", @"页面A", @"页面AA", @"页面AAA", @"页面AAAA"]];
