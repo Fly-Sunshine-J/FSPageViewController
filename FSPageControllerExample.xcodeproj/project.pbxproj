@@ -799,6 +799,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = Launchimage;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = M974WD5VWM;
 				INFOPLIST_FILE = FSPageControllerExample/Info.plist;
@@ -816,6 +817,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = Launchimage;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = FSPageControllerExample/Info.plist;
