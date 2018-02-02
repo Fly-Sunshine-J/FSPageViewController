@@ -160,7 +160,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     NSMutableArray *vcs = [self.vcClasses mutableCopy];
     
     NSInteger selectedIndex = self.selectedIndex;
-    if (selectedIndex > index) {
+    if (selectedIndex >= index) {
         selectedIndex++;
     }
     

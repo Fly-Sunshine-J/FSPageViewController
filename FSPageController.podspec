@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "FSPageController"
-  s.version      = "1.0.0"
+  s.version      = "1.0.1"
   s.summary      = "A Simple Page ViewController, Perfect to simulate the UIViewController life cycle"
 
   # This description is used to generate tags and improve search results.
