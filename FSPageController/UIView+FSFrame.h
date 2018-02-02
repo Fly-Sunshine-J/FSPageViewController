@@ -20,3 +20,4 @@
 @property (nonatomic, assign) CGFloat fs_centerY;
 
 @end
+

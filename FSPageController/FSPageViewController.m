@@ -159,9 +159,9 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     NSMutableArray *titlesArray = [self.titles mutableCopy];
     NSMutableArray *vcs = [self.vcClasses mutableCopy];
     
-    if (self.selectedIndex > index) {
-        self.selectedIndex = self.selectedIndex + 1;
-        
+    NSInteger selectedIndex = self.selectedIndex;
+    if (selectedIndex > index) {
+        selectedIndex++;
     }
     
     if (index >= self.childControllerCount) {
@@ -175,7 +175,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
         for (NSNumber *key in keys) {
             if (key.integerValue >= index) {
                 self.displayVCCache[@(key.integerValue + 1)] = self.displayVCCache[key];
-                if (index != self.selectedIndex) {
+                if (index != selectedIndex) {
                     [self.displayVCCache removeObjectForKey:key];
                 }
             }
@@ -187,7 +187,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     _titles = [titlesArray copy];
     _vcClasses = [vcs copy];
     [self fs_calculateFrames];
-    [self fs_setSelectedIndex:self.selectedIndex animated:NO];
+    [self fs_setSelectedIndex:selectedIndex animated:NO];
     
     if (index == self.selectedIndex) {
         [self fs_removeViewAtIndex:index];
@@ -231,8 +231,10 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
         [self.vcViewFrames addObject:[NSValue valueWithCGRect:frame]];
     }
     self.contentScrollView.contentSize = CGSizeMake(self.contentScrollView.fs_width * self.childControllerCount, self.contentScrollView.fs_height);
-//    解决屏幕闪烁的bug
-    self.displayVCCache[@(self.selectedIndex)].view.frame = self.vcViewFrames[self.selectedIndex].CGRectValue;
+//    解决屏幕闪烁的bugself.displayVCCache[@(self.selectedIndex)].view.frame = self.vcViewFrames[self.selectedIndex].CGRectValue;
+    [self.displayVCCache enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, UIViewController * _Nonnull obj, BOOL * _Nonnull stop) {
+        obj.view.frame = self.vcViewFrames[key.integerValue].CGRectValue;
+    }];
 }
 
 
@@ -374,6 +376,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
 
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex {
+    
     [self fs_setSelectedIndex:selectedIndex animated:YES];
 }
 
