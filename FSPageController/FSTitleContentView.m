@@ -75,6 +75,10 @@
     self.backgroundColor = titleContentColor;
 }
 
+- (void)setSelectedIndex:(NSInteger)selectedIndex animated:(BOOL)animated {
+    [self fs_setSelectedIndex:selectedIndex animated:animated];
+}
+
 - (void)setSelectedIndex:(NSInteger)selectedIndex {
     [self fs_setSelectedIndex:selectedIndex animated:YES];
 }

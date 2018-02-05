@@ -302,7 +302,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
 
 
 - (void)fs_setSelectedIndex:(NSUInteger)selectedIndex animated:(BOOL)animated {
-    self.titleContentView.selectedIndex = selectedIndex;
+    [self.titleContentView setSelectedIndex:selectedIndex animated:animated];
     if (_isAppear) {
         if (selectedIndex != 0) {
             [self.contentScrollView setContentOffset:CGPointMake(selectedIndex * self.contentScrollView.fs_width, 0)];

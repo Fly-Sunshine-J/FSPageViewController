@@ -18,6 +18,8 @@
 
 @interface FSTitleContentView : UIScrollView<UIScrollViewDelegate>
 
+- (void)setSelectedIndex:(NSInteger)selectedIndex animated:(BOOL)animated;
+
 @property (nonatomic, weak) id<FSTitleContentViewDelegate> fs_delegate;
 
 @property (nonatomic, assign) FSPageViewControllerStyle style;
