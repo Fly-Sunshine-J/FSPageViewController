@@ -331,12 +331,11 @@
     }
     [self fs_changeTitleWithIndex:index];
     [self fs_adjustContentTitlePositionAtIndex:index animated:YES];
-    _selectedIndex = index;
     [self.progressView moveToPosition:index];
     if ([self.fs_delegate respondsToSelector:@selector(contentViewTitleClick:atIndex:)]) {
         [self.fs_delegate contentViewTitleClick:self atIndex:index];
     }
-
+    _selectedIndex = index;
 }
 
 /*
