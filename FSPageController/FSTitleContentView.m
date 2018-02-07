@@ -19,6 +19,7 @@
 @property (nonatomic, strong) NSMutableArray<NSValue *> *titleFrames;
 
 @property (nonatomic, assign) CGFloat titleFontHeight;
+@property (nonatomic, assign) CGFloat calculateAfterMargin;
 
 @property (nonatomic, strong) UIView *bottomLineView;
 @property (nonatomic, strong) FSProgressView *progressView;
@@ -115,10 +116,12 @@
     }
     if (FSScreenW > totalWidth) {
         CGFloat titleMargin = (FSScreenW - totalWidth) / (self.titles.count + 1);
-        _titleMargin = titleMargin >= _titleMargin ? titleMargin : _titleMargin;
+        self.calculateAfterMargin = titleMargin >= _titleMargin ? titleMargin : _titleMargin;
+    }else {
+        self.calculateAfterMargin = _titleMargin;
     }
     
-    self.contentInset = UIEdgeInsetsMake(0, 0, 0, _titleMargin);
+    self.contentInset = UIEdgeInsetsMake(0, 0, 0, self.calculateAfterMargin);
 }
 
 
@@ -138,7 +141,7 @@
     for (int i = 0; i < count; i++) {
         FSHeaderLabel *lastLabel = [self.titleLabels lastObject];
         titleLabelW = [self.titleWidths[i] floatValue];
-        titleLabelX = lastLabel.fs_x + lastLabel.fs_width + self.titleMargin;
+        titleLabelX = lastLabel.fs_x + lastLabel.fs_width + self.calculateAfterMargin;
         titleLabelY = (self.titleHeight - titleLabelH) / 2;
         CGRect frame = CGRectMake(titleLabelX, 0, titleLabelW, self.titleHeight);
         [self.titleFrames addObject:[NSValue valueWithCGRect:frame]];
@@ -158,7 +161,7 @@
     
     
     CGFloat height = self.bottomLineWidth;
-    self.bottomLineView.frame = CGRectMake(0, self.fs_height - height, self.contentSize.width + self.titleMargin, height);
+    self.bottomLineView.frame = CGRectMake(0, self.fs_height - height, self.contentSize.width + self.calculateAfterMargin, height);
     
     [self fs_addProgressViewWithLine:self.style == FSPageViewControllerStyleLine];
 }
@@ -191,7 +194,7 @@
     }
     
     self.progressView.color = self.progressTintColor;
-    self.progressView.titleMargin = self.titleMargin;
+    self.progressView.titleMargin = self.calculateAfterMargin;
     self.progressView.frame = frame;
     self.progressView.titleFrames = [self.titleFrames copy];
     
@@ -237,12 +240,12 @@
     CGFloat totalWidth = 0;
     CGFloat titleContentViewCenterX = self.fs_width / 2;
     for (int i = 0; i < self.titleLabels.count; i++) {
-        totalWidth += self.titleMargin + self.titleWidths[i].floatValue;
+        totalWidth += self.calculateAfterMargin + self.titleWidths[i].floatValue;
         if (totalWidth - self.titleWidths[i].floatValue / 2 < titleContentViewCenterX) {
             leftShowMaxIndex = i;
             continue;
         }
-        if (self.contentSize.width - totalWidth + self.titleWidths[i].floatValue / 2 < titleContentViewCenterX - self.titleMargin) {
+        if (self.contentSize.width - totalWidth + self.titleWidths[i].floatValue / 2 < titleContentViewCenterX - self.calculateAfterMargin) {
             rightShowMaxIndex = i;
             break;
         }
@@ -253,7 +256,7 @@
     }
     
     if (index >= rightShowMaxIndex) {
-        [self setContentOffset:CGPointMake(self.contentSize.width - self.fs_width + self.titleMargin, 0) animated:animated];
+        [self setContentOffset:CGPointMake(self.contentSize.width - self.fs_width + self.calculateAfterMargin, 0) animated:animated];
         return;
     }
     
