@@ -27,7 +27,7 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.dataArray = @[@"Normal", @"NavigationBar", @"TabBar", @"NavigationBar+TabBar"];
     
-    [self tableView]
+    [self tableView];
     
 }
 
