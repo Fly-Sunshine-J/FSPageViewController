@@ -297,7 +297,7 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     }
     UIViewController *vc = [self fs_initViewControllerWithIndex:index];
     if (vc.view.superview) {
-        [vc.view removeFromSuperview];
+        [vc.view removeFromSuperview]
     }
 }
 
