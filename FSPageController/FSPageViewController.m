@@ -39,6 +39,8 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
 
 @implementation FSPageViewController
 
+@dynamic style, scale, titleContentColor, titleFont, titleNormalColor, titleSelectedColor, titleHeight, titleMargin, bottomLineViewColor, bottomLineWidth, progressTintColor, cornerRadius;
+
 //MARK: - 声明周期
 
 //#pragma message "Ignoring designated initializer warnings"
@@ -324,55 +326,64 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
 
 // MARK: - Setter & Getter
 
--(void)setStyle:(FSPageViewControllerStyle)style {
-    self.titleContentView.style = style;
-}
-
-- (FSPageViewControllerStyle)style {
-    return self.titleContentView.style;
-}
-
-- (void)setScale:(BOOL)scale {
-    self.titleContentView.scale = scale;
-}
-
-- (BOOL)isScale {
-    return self.titleContentView.scale;
-}
-
-- (void)setTitleContentColor:(UIColor *)titleContentColor {
-    self.titleContentView.titleContentColor = titleContentColor;
-}
-
-- (UIColor *)titleContentColor {
-    return self.titleContentView.titleContentColor;
-}
 
 
-- (void)setTitleFont:(UIFont *)titleFont {
-    self.titleContentView.titleFont = titleFont;
+- (id)forwardingTargetForSelector:(SEL)aSelector {
+    if ([self.titleContentView respondsToSelector:aSelector]) {
+        return self.titleContentView;
+    }
+    return [super forwardingTargetForSelector:aSelector];
 }
 
-- (UIFont *)titleFont {
-    return self.titleContentView.titleFont;
-}
+//-(void)setStyle:(FSPageViewControllerStyle)style {
+//    self.titleContentView.style = style;
+//}
+//
+//- (FSPageViewControllerStyle)style {
+//    return self.titleContentView.style;
+//}
 
-- (void)setTitleNormalColor:(UIColor *)titleNormalColor {
-    self.titleContentView.titleNormalColor = titleNormalColor;
-}
+//- (void)setScale:(BOOL)scale {
+//    self.titleContentView.scale = scale;
+//}
+//
+//- (BOOL)isScale {
+//    return self.titleContentView.scale;
+//}
 
-- (UIColor *)titleNormalColor {
-    return self.titleContentView.titleNormalColor;
-}
+//- (void)setTitleContentColor:(UIColor *)titleContentColor {
+//    self.titleContentView.titleContentColor = titleContentColor;
+//}
+//
+//- (UIColor *)titleContentColor {
+//    return self.titleContentView.titleContentColor;
+//}
 
-- (void)setTitleSelectedColor:(UIColor *)titleSelectedColor {
-    self.progressTintColor = titleSelectedColor;
-    self.titleContentView.titleSelectedColor = titleSelectedColor;
-}
 
-- (UIColor *)titleSelectedColor {
-    return self.titleContentView.titleSelectedColor;
-}
+//- (void)setTitleFont:(UIFont *)titleFont {
+//    self.titleContentView.titleFont = titleFont;
+//}
+//
+//- (UIFont *)titleFont {
+//    return self.titleContentView.titleFont;
+//}
+
+//- (void)setTitleNormalColor:(UIColor *)titleNormalColor {
+//    self.titleContentView.titleNormalColor = titleNormalColor;
+//}
+//
+//- (UIColor *)titleNormalColor {
+//    return self.titleContentView.titleNormalColor;
+//}
+
+//- (void)setTitleSelectedColor:(UIColor *)titleSelectedColor {
+//    self.progressTintColor = titleSelectedColor;
+//    self.titleContentView.titleSelectedColor = titleSelectedColor;
+//}
+//
+//- (UIColor *)titleSelectedColor {
+//    return self.titleContentView.titleSelectedColor;
+//}
 
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex {
@@ -384,54 +395,54 @@ FSPageViewControllerKey const FSPageViewControllerCurrentIndexKey =  @"FSPageVie
     return self.titleContentView.selectedIndex;
 }
 
-- (void)setTitleHeight:(CGFloat)titleHeight {
-    self.titleContentView.titleHeight = titleHeight;
-}
+//- (void)setTitleHeight:(CGFloat)titleHeight {
+//    self.titleContentView.titleHeight = titleHeight;
+//}
+//
+//- (CGFloat)titleHeight {
+//    return self.titleContentView.titleHeight;
+//}
+//
+//- (void)setTitleMargin:(CGFloat)titleMargin {
+//    self.titleContentView.titleMargin = titleMargin;
+//}
+//
+//- (CGFloat)titleMargin {
+//    return self.titleContentView.titleMargin;
+//}
 
-- (CGFloat)titleHeight {
-    return self.titleContentView.titleHeight;
-}
+//- (void)setBottomLineViewColor:(UIColor *)bottomLineViewColor {
+//    self.titleContentView.bottomLineViewColor = bottomLineViewColor;
+//}
+//
+//- (UIColor *)bottomLineViewColor {
+//    return self.titleContentView.bottomLineViewColor;
+//}
+//
+//- (void)setBottomLineWidth:(CGFloat)bottomLineWidth {
+//    self.titleContentView.bottomLineWidth = bottomLineWidth;
+//}
+//
+//
+//- (CGFloat)bottomLineWidth {
+//    return self.titleContentView.bottomLineWidth;
+//}
+//
+//- (void)setProgressTintColor:(UIColor *)progressTintColor {
+//    self.titleContentView.progressTintColor = progressTintColor;
+//}
+//
+//- (UIColor *)progressTintColor {
+//    return self.titleContentView.progressTintColor;
+//}
 
-- (void)setTitleMargin:(CGFloat)titleMargin {
-    self.titleContentView.titleMargin = titleMargin;
-}
-
-- (CGFloat)titleMargin {
-    return self.titleContentView.titleMargin;
-}
-
-- (void)setBottomLineViewColor:(UIColor *)bottomLineViewColor {
-    self.titleContentView.bottomLineViewColor = bottomLineViewColor;
-}
-
-- (UIColor *)bottomLineViewColor {
-    return self.titleContentView.bottomLineViewColor;
-}
-
-- (void)setBottomLineWidth:(CGFloat)bottomLineWidth {
-    self.titleContentView.bottomLineWidth = bottomLineWidth;
-}
-
-
-- (CGFloat)bottomLineWidth {
-    return self.titleContentView.bottomLineWidth;
-}
-
-- (void)setProgressTintColor:(UIColor *)progressTintColor {
-    self.titleContentView.progressTintColor = progressTintColor;
-}
-
-- (UIColor *)progressTintColor {
-    return self.titleContentView.progressTintColor;
-}
-
-- (void)setCornerRadius:(CGFloat)cornerRadius {
-    self.titleContentView.cornerRadius = cornerRadius;
-}
-
-- (CGFloat)cornerRadius {
-    return self.titleContentView.cornerRadius;
-}
+//- (void)setCornerRadius:(CGFloat)cornerRadius {
+//    self.titleContentView.cornerRadius = cornerRadius;
+//}
+//
+//- (CGFloat)cornerRadius {
+//    return self.titleContentView.cornerRadius;
+//}
 
 // MARK: - 懒加载
 
