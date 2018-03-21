@@ -1,4 +1,6 @@
 language: objective-c
 xcode_porject: FSPageControllerExample.xcodeproj
-xcode_scheme: FSPageController
+xcode_scheme: 
+- FSPageController
+- FSPageControllerExample
 osx_image: xcode9
